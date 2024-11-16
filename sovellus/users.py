@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from db import db
 from sqlalchemy.sql import text
 from os import getenv
+from werkzeug.security import check_password_hash, generate_password_hash
+
 
 def login():
     username = request.form["username"]
@@ -19,6 +21,9 @@ def login():
 
     session["username"] = username
     return redirect("/")
+
+def register():
+    pass
 
 def logout():
     del session["username"]
