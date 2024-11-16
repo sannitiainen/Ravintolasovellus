@@ -29,13 +29,28 @@ def login():
 
 
 def register():
-    username = request.form["username"]
-    password = request.form["password"]
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
 
-    hash_value = generate_password_hash(password)
-    sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
-    db.session.execute(sql, {"username":username, "password":hash_value})
-    db.session.commit()
+        sql = "SELECT id FROM users WHERE username=:username"
+        result = db.session.execute(sql, {"username": username})
+        existing_user = result.fetchone()
+
+        if existing_user:
+            flash("Username already exists. Please choose a different one.", "error")
+            return redirect("/register")
+        
+        hash_value = generate_password_hash(password)
+        sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
+        db.session.execute(sql, {"username":username, "password":hash_value})
+        db.session.commit()
+
+        flash("Registration successful! Please log in.", "success")
+        return redirect("/login")
+
+    return render_template("register.html")
+
 
 
 
