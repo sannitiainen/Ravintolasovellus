@@ -1,6 +1,6 @@
 from app import app
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from db import db
 from sqlalchemy.sql import text
@@ -12,18 +12,32 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
 
-    #TODO: check username and password
+    sql = "SELECT id, password FROM users WHERE username=:username"
+    result = db.session.execute(sql, {"username":username})
+    user = result.fetchone()
+    if not user:
+        flash("Username not found. Please register.", "info")
+        return redirect("/register")
+    else:
+        hash_value = user.password
+        if check_password_hash(hash_value, password):
+            session["username"] = username
+            return redirect("/")
+        else:
+            flash("Invalid password", "error")
+            return redirect("/login")
 
-    usernames = db.session.execute(text("SELECT username FROM users"))
-    users_list = [row[0] for row in usernames.fetchall()]
-    if username not in users_list:
-        return "Access denied: Invalid username", 401
-
-    session["username"] = username
-    return redirect("/")
 
 def register():
-    pass
+    username = request.form["username"]
+    password = request.form["password"]
+
+    hash_value = generate_password_hash(password)
+    sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
+    db.session.execute(sql, {"username":username, "password":hash_value})
+    db.session.commit()
+
+
 
 def logout():
     del session["username"]
