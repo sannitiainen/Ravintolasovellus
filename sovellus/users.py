@@ -36,16 +36,16 @@ def register():
         existing_user = result.fetchone()
 
         if existing_user:
-            flash("Username already exists. Please choose a different one.", "error")
-            return redirect("/register")
+            return render_template("error.html", message="Käyttäjätunnus on jo käytössä.")
         
         hash_value = generate_password_hash(password)
-        sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
-        db.session.execute(sql, {"username":username, "password":hash_value})
-        db.session.commit()
-
-        flash("Registration successful! Please log in.", "success")
-        return redirect("/login")
+        try:
+            sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
+            db.session.execute(sql, {"username":username, "password":hash_value})
+            db.session.commit()
+        except:
+            return False
+        return login(username, password)
 
     return render_template("register.html")
 
