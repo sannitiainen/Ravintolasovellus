@@ -1,12 +1,24 @@
 {% extends "layout.html" %}
 
-{% block title %}Rekisteröidy{% endblock %}
-{% block content %}
-<h2>Rekisteröidy</h2>
-<form action="/register" method="POST">
-Käyttäjätunnus: <input type="text" name="username"> <br>
-Salasana: <input type="password" name="password"> <br>
-<input type="submit" value="Kirjaudu">
-</form>
-{% endblock %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li style="color: red;">{{ message }}</li>
+    {% endfor %}
+</ul>
 {% endif %}
+{% endwith %}
+
+<form action="/register" method="post">
+Tunnus: <input type="text" name="username">
+<p>
+Salasana: <input type="password" name="password1">
+<p>
+Salasana uudestaan: <input type="password" name="password2">
+<p>
+<input type="submit" value="Luo tunnus">
+</form>
+
+
+

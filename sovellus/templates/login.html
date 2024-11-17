@@ -6,10 +6,22 @@
 {% block title %}Kirjaudu sisään{% endblock %}
 {% block content %}
 <h2>Kirjaudu sisään</h2>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+{% for message in messages %}
+<li style="color: red;">{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
 <form action="/login" method="POST">
 Tunnus: <input type="text" name="username"> <br>
 Salasana: <input type="password" name="password"> <br>
 <input type="submit" value="Kirjaudu">
 </form>
+Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a>
 {% endblock %}
 {% endif %}
