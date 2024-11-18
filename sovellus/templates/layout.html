@@ -2,7 +2,12 @@
 <title>Ravintolasovellus - {% block title %}{% endblock %}</title>
 <h1>Ravintolasovellus</h1>
 <a href="/">Etusivu</a>
+{% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <a href="/logout">Kirjaudu ulos</a>
+{% else %}
 <a href="/login">Kirjaudu sisään</a>
+{% endif %}
 <hr>
 {% block content %}{% endblock %}
 <hr>

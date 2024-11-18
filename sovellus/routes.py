@@ -1,6 +1,6 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
-from users import login, register
+from users import login, register, logout
 
 @app.route("/")
 def index():
@@ -13,10 +13,13 @@ def login_route():
     else:
         username = request.form["username"]
         password = request.form["password"]
-        login(username, password)
+        if login(username, password):
+            return redirect("/")
+        else:
+            flash("Väärä tunnus tai salasana")
+            return redirect("/login")
 
-
-@app.route("/register")
+@app.route("/register", methods = ["GET", "POST"])
 def register_route():
     if request.method == "GET":
         return render_template("register.html")
@@ -25,14 +28,20 @@ def register_route():
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
-            return render_template("error.html", message="Salasanat eroavat")
-        if register(username, password1):
-            return redirect("/")
+            flash("Salasanat eroavat.")
+            return redirect("/register")
+        
+        if not register(username, password1):
+            flash("Rekisteröinti ei onnistunut")
+            return redirect("/register")
+
         else:
-            return render_template("error.html", message="Rekisteröinti ei onnistunut")
+            flash("Rekisteröinti onnistui! Kirjaudu sisään.")
+            return redirect("/")
+
 
 @app.route("/logout")
-def logout():
-    del session["username"]
+def logout_route():
+    logout()
     return redirect("/")
 

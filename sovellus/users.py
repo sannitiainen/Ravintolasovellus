@@ -10,48 +10,35 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 
 def login(username, password):
-    sql = text("SELECT id, password FROM users WHERE username=:username")
+    sql = text("SELECT id, password, admin FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
-        flash("Username not found. Please register.", "info")
-        return redirect("/register")
+        return False
     else:
-        hash_value = user.password
-        if check_password_hash(hash_value, password):
+        if check_password_hash(user[1], password):
             session["username"] = username
-            return redirect("/")
+            return True
         else:
-            flash("Invalid password", "error")
-            return redirect("/login")
-
-
-def register():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-
-        sql = "SELECT id FROM users WHERE username=:username"
-        result = db.session.execute(sql, {"username": username})
-        existing_user = result.fetchone()
-
-        if existing_user:
-            return render_template("error.html", message="Käyttäjätunnus on jo käytössä.")
-        
-        hash_value = generate_password_hash(password)
-        try:
-            sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
-            db.session.execute(sql, {"username":username, "password":hash_value})
-            db.session.commit()
-        except:
             return False
-        return login(username, password)
 
-    return render_template("register.html")
+
+def register(username, password):    
+    hash_value = generate_password_hash(password)
+    role = 0
+    #try:
+    sql = text("INSERT INTO users (username, password, admin) VALUES (:username, :password, :admin)")
+    db.session.execute(sql, {"username":username, "password":hash_value, "admin":role})
+    db.session.commit()
+    print("ok")
+    return login(username, password)
+    #except:
+    #    return False
+
+
 
 
 
 
 def logout():
     del session["username"]
-    return redirect("/")

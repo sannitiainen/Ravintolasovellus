@@ -1,8 +1,5 @@
 {% extends "layout.html" %}
-{% if session.username %}
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
-    <a href="/logout">Kirjaudu ulos</a>
-{% else %}
+
 {% block title %}Kirjaudu sisään{% endblock %}
 {% block content %}
 <h2>Kirjaudu sisään</h2>
@@ -24,4 +21,3 @@ Salasana: <input type="password" name="password"> <br>
 </form>
 Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a>
 {% endblock %}
-{% endif %}
