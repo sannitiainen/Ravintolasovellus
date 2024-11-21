@@ -1,10 +1,13 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
 from users import login, register, logout
+from restaurants import get_all_restaurants, search_restaurant, add_restaurant, delete_restaurant
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", restaurants = get_all_restaurants())
+
+# login/register
 
 @app.route("/login", methods=["GET", "POST"])
 def login_route():
@@ -45,3 +48,13 @@ def logout_route():
     logout()
     return redirect("/")
 
+# restaurants
+
+@app.route("/")
+def add_restaurant_route():
+    pass
+
+@app.route("/search")
+def search_route():
+    #ender_template("search.html")
+    pass
