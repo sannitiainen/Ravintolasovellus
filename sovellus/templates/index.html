@@ -2,18 +2,20 @@
 
 
 {% block title %}Etusivu{% endblock %}
+
 {% block content %}
     <h2>Etusivu</h2>
-    Tervetuloa sovellukseen!
+    <p>Tervetuloa sovellukseen!</p>
 
-
-{% if restaurants %}
-    <ul>
-    {% for restaurant in restaurants %}
-        <li><a href="/restaurant/{{ restaurant.id }}">{{ restaurant.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No restaurants found.</p>
-{% endif %}
+    <h4>Ravintolat:</h4> 
+    
+    {% if restaurants %}
+        <ul>
+        {% for restaurant in restaurants %}
+            <li><a href="/restaurant/{{ restaurant.id }}">{{ restaurant.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No restaurants found.</p>
+    {% endif %}
 {% endblock %}
