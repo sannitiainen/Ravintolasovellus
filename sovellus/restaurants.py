@@ -16,22 +16,30 @@ def get_all_restaurants():
 
 
 # only administrator
+
 def add_restaurant():
     #check if admin
     name = request.form["name"]
     openinghours = request.form["openinghours"]
     address = request.form["address"]
     info = request.form["info"]
+    #r_type = request.form["type"]
+
+    #add rating
+    #sql_r = text("SELECT rating FROM reviews WHERE restaurant_id = name")
+    #result = db.session.execute(sql_r, {"name":name})
+    #ratings = list(result.fetchall())
+    #avg = sum(ratings)/len(ratings)
 
     sql = text("INSERT INTO restaurants (name, openinghours, address, info, visible) VALUES (:name, :openinghours, :address, :info, :visible)")
-    db.session.execute(sql, {"name": name, "openinghours": openinghours, "address": address, "info": info, "visible": True})
-    db.session.commit()
+    db.session.execute(sql, {"name": name, "openinghours": openinghours, "address": address, "info": info, "visible": 1})
+    return db.session.commit()
 
 def delete_restaurant():
     #check if admin
     name = request.form["name"]
 
-    sql = text("UPDATE restaurants SET visible=FALSE WHERE name LIKE :name;")
+    sql = text("UPDATE restaurants SET visible=0 WHERE name LIKE :name;")
     db.session.execute(sql, {"name": name})
-    db.session.commit()
+    return db.session.commit()
 
