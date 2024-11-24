@@ -10,7 +10,9 @@ CREATE TABLE restaurants (
     name TEXT,
     openinghours TEXT,
     address TEXT,
-    info TEXT
+    info TEXT,
+    avg_rating FLOAT,
+    type TEXT
 );
 
 CREATE TABLE reviews (
@@ -19,4 +21,22 @@ CREATE TABLE reviews (
     restaurant_id INTEGER REFERENCES restaurants,
     rating INTEGER,
     comment TEXT
+);
+
+CREATE TABLE favorites (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users,
+    restaurant_id INTEGER REFERENCES restaurants
+);
+
+CREATE TABLE groups (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    creator INTEGER REFERENCES users
+);
+
+CREATE TABLE map_groups (
+    id SERIAL PRIMARY KEY,
+    restaurant_id INTEGER REFERENCES restaurants
+    group_id INTEGER REFERENCES groups
 );

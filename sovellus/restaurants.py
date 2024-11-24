@@ -10,20 +10,15 @@ def search_restaurant():
     return render_template("search.html", restaurants=restaurants)
 
 def get_all_restaurants():
-    sql = text("SELECT id, name FROM restaurants WHERE visible = TRUE ORDER BY name")
+    sql = text("SELECT id, name FROM restaurants WHERE visible = 1 ORDER BY name")
     a = db.session.execute(sql).fetchall()
     return db.session.execute(sql).fetchall()
 
 
 # only administrator
 
-def add_restaurant():
+def add_restaurant(name, address, openinghours, info, type):
     #check if admin
-    name = request.form["name"]
-    openinghours = request.form["openinghours"]
-    address = request.form["address"]
-    info = request.form["info"]
-    #r_type = request.form["type"]
 
     #add rating
     #sql_r = text("SELECT rating FROM reviews WHERE restaurant_id = name")
@@ -31,9 +26,15 @@ def add_restaurant():
     #ratings = list(result.fetchall())
     #avg = sum(ratings)/len(ratings)
 
-    sql = text("INSERT INTO restaurants (name, openinghours, address, info, visible) VALUES (:name, :openinghours, :address, :info, :visible)")
-    db.session.execute(sql, {"name": name, "openinghours": openinghours, "address": address, "info": info, "visible": 1})
-    return db.session.commit()
+    sql = text("INSERT INTO restaurants (name, openinghours, address, info, visible, type) VALUES (:name, :openinghours, :address, :info, :visible, :type);")
+    db.session.execute(sql, {"name": name, "openinghours": openinghours, "address": address, "info": info, "visible": 1, "type":type})
+    db.session.commit()
+
+    sql2 = text("SELECT id FROM restaurants WHERE name LIKE :name")
+    restaurant_id = db.session.execute(sql2, {"name": name}).fetchone()
+    
+    print(restaurant_id)
+    return restaurant_id[0]
 
 def delete_restaurant():
     #check if admin

@@ -3,6 +3,7 @@ from flask import redirect, render_template, request, session, flash
 from users import login, register, logout
 from restaurants import get_all_restaurants, search_restaurant, add_restaurant, delete_restaurant
 
+# home page
 @app.route("/")
 def index():
     return render_template("index.html", restaurants = get_all_restaurants())
@@ -50,11 +51,26 @@ def logout_route():
 
 # restaurants
 
-@app.route("/")
+@app.route("/add_restaurant", methods=["GET", "POST"])
 def add_restaurant_route():
-    pass
+    if request.method == "GET":
+        return render_template("add_restaurant.html")
+    if request.method == "POST":
+        print("ok")
+        name = request.form["name"]
+        address = request.form["address"]
+        opening_hours = request.form["openinghours"]
+        info = request.form["info"]
+        type = request.form["type"]
+        restaurant_id = add_restaurant(name, address, opening_hours, info, type)
+        if add_restaurant(name, address, opening_hours, info, type):
+            flash("Ravintolan lisääminen onnistui!")
+            return redirect("/restaurant/"+str(restaurant_id))
+        else:
+            print("paske")
 
-@app.route("/search")
+
+@app.route("/search", methods = ["GET"])
 def search_route():
     #ender_template("search.html")
     pass

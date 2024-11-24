@@ -7,6 +7,13 @@
     <h2>Etusivu</h2>
     <p>Tervetuloa sovellukseen!</p>
 
+<h4>Etsi Ravintolaa:</h4> 
+<form action="/result" method="GET">
+    Hakusana: <input type="text" name="query">
+    <br>
+    <input type="submit" value="Lähetä">
+    </form>
+
     <h4>Ravintolat:</h4> 
     
     {% if restaurants %}
