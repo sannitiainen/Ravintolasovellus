@@ -1,7 +1,7 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
 from users import login, register, logout
-from restaurants import get_all_restaurants, search_restaurant, add_restaurant, delete_restaurant
+from restaurants import get_all_restaurants, search_restaurant, add_restaurant, delete_restaurant, show_restaurant
 
 # home page
 @app.route("/")
@@ -67,10 +67,15 @@ def add_restaurant_route():
             flash("Ravintolan lisääminen onnistui!")
             return redirect("/restaurant/"+str(restaurant_id))
         else:
-            print("paske")
+            flash("Ravintolan lisääminen ei onnistunut :(")
 
 
 @app.route("/search", methods = ["GET"])
 def search_route():
-    #ender_template("search.html")
+    #render_template("search.html")
     pass
+
+@app.route("/restaurant/<int:restaurant_id>")
+def restaurant_info_route(restaurant_id):
+    info = show_restaurant(restaurant_id)
+    return render_template("restaurant_page.html", id = restaurant_id, name = info[0][1], address = info[0][3], openinghours = info[0][2], type = info[0][4])

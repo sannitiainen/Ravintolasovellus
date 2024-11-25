@@ -36,6 +36,11 @@ def add_restaurant(name, address, openinghours, info, type):
     print(restaurant_id)
     return restaurant_id[0]
 
+def show_restaurant(restaurant_id):
+    sql = text("SELECT * FROM restaurants WHERE id = :id")
+    restaurant = db.session.execute(sql, {"id": restaurant_id}).fetchall()
+    return restaurant
+
 def delete_restaurant():
     #check if admin
     name = request.form["name"]
