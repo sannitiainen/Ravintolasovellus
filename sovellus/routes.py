@@ -1,7 +1,8 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
-from users import login, register, logout
+from users import login, register, logout, become_admin
 from restaurants import get_all_restaurants, search_restaurant, add_restaurant, delete_restaurant, show_restaurant
+from reviews import add_review
 
 # home page
 @app.route("/")
@@ -56,7 +57,6 @@ def add_restaurant_route():
     if request.method == "GET":
         return render_template("add_restaurant.html")
     if request.method == "POST":
-        print("ok")
         name = request.form["name"]
         address = request.form["address"]
         opening_hours = request.form["openinghours"]
@@ -67,7 +67,7 @@ def add_restaurant_route():
             flash("Ravintolan lisääminen onnistui!")
             return redirect("/restaurant/"+str(restaurant_id))
         else:
-            flash("Ravintolan lisääminen ei onnistunut :(")
+            flash("Ravintolan lisääminen ei onnistunut")
 
 
 @app.route("/search", methods = ["GET"])
@@ -79,3 +79,34 @@ def search_route():
 def restaurant_info_route(restaurant_id):
     info = show_restaurant(restaurant_id)
     return render_template("restaurant_page.html", id = restaurant_id, name = info[0][1], address = info[0][3], openinghours = info[0][2], type = info[0][4])
+
+@app.route("/restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
+def add_review_route(restaurant_id):
+    if request.method == "GET":
+        return render_template("restaurant_page.html")
+    if request.method == "POST":
+        name = request.form["name"]
+        rating = request.form["rating"]
+        comment = request.form["comment"]
+        restaurant_id = add_review(name, rating, comment)
+        if add_review(name, rating, comment):
+            flash("Arvion lisääminen onnistui!")
+            return redirect("/restaurant/"+{restaurant_id})
+        else: 
+            flash("Arvion lisääminen ei onnistunut")
+
+@app.route("/become_admin", methods = ["GET", "POST"])
+def become_admin_route():
+    if "user_id" not in session:
+        flash("Kirjaudu sisään")
+        return redirect("/login")
+    
+    if request.method == "GET":
+        return render_template("become_admin.html")
+    
+    if request.method == "POST":
+        if become_admin():
+            flash("Olet nyt ylläpitäjä")
+            return redirect("/")
+        else:
+            flash("Jokin meni vikaan")

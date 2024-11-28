@@ -33,7 +33,6 @@ def add_restaurant(name, address, openinghours, info, type):
     sql2 = text("SELECT id FROM restaurants WHERE name LIKE :name")
     restaurant_id = db.session.execute(sql2, {"name": name}).fetchone()
     
-    print(restaurant_id)
     return restaurant_id[0]
 
 def show_restaurant(restaurant_id):

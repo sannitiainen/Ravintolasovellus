@@ -1,17 +1,3 @@
-{% extends "layout.html" %}
-
-{% block content %}
-
-<h2>{{ name }}</h2>
-<ul>
-<li>Aukioloajat : {{ openinghours }}
-<li>Osoite : {{ address }}
-<li>Tyyppi : {{ type }}
-<li>Info : {{ info }}
-
-<br>
-<br>
-
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <ul>
@@ -22,9 +8,7 @@
 {% endif %}
 {% endwith %}
 
-<h3>Arvioi ravintola</h3>
-
-<form action="//restaurant/<int:restaurant_id>" method="POST">
+<form action="/restaurant/<int:restaurant_id>" method="POST">
 Tähdet:
 <p>
 1 <input type="radio" name="rating" value="1">
@@ -39,4 +23,3 @@ Kommentti: <br>
 <p>
 <input type="submit" value="Lisää arvio">
 </form>
-{% endblock %}
