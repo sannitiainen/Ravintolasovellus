@@ -26,6 +26,8 @@
         <p>No restaurants found.</p>
     {% endif %}
 
+{% if session["user_role"] == "user" %}
 <a href="/become_admin">Ylläpitäjäksi
+{% endif %}
 
 {% endblock %}

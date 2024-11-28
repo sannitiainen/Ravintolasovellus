@@ -53,11 +53,6 @@ def become_admin():
     else:
         return False
 
-
-
-
-
-
 def logout():
     del session["username"]
     del session["user_id"]

@@ -1,6 +1,6 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
-from users import login, register, logout, become_admin
+from users import login, register, logout, become_admin, is_admin
 from restaurants import get_all_restaurants, search_restaurant, add_restaurant, delete_restaurant, show_restaurant
 from reviews import add_review
 
@@ -54,6 +54,9 @@ def logout_route():
 
 @app.route("/add_restaurant", methods=["GET", "POST"])
 def add_restaurant_route():
+    if not is_admin():
+        flash("Sinulla ei ole oikeuksia tähän toimintoon")
+        return redirect("/")
     if request.method == "GET":
         return render_template("add_restaurant.html")
     if request.method == "POST":
@@ -82,6 +85,9 @@ def restaurant_info_route(restaurant_id):
 
 @app.route("/restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
 def add_review_route(restaurant_id):
+    if "user_id" not in session:
+        flash("Kirjaudu sisään")
+        return redirect("/login")
     if request.method == "GET":
         return render_template("restaurant_page.html")
     if request.method == "POST":

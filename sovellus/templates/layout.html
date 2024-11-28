@@ -2,8 +2,11 @@
 <title>Ravintolasovellus - {% block title %}{% endblock %}</title>
 <h1>Ravintolasovellus</h1>
 <a href="/">Etusivu</a>
+
+{% if session["user_role"] == "admin" %}
 <a href="/add_restaurant">Lisää uusi ravintola</a>
 <a href="/add_group">Lisää uusi ryhmä
+{% endif %}
 
 </a>
 {% if session.username %}
