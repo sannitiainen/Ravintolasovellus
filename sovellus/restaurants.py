@@ -1,4 +1,4 @@
-from flask import request, render_template
+from flask import request, render_template, session
 from db import db
 from sqlalchemy.sql import text
 
@@ -11,15 +11,12 @@ def search_restaurant():
 
 def get_all_restaurants():
     sql = text("SELECT id, name FROM restaurants WHERE visible = 1 ORDER BY name")
-    a = db.session.execute(sql).fetchall()
     return db.session.execute(sql).fetchall()
 
 
 # only administrator
 
 def add_restaurant(name, address, openinghours, info, type):
-    #check if admin
-
     #add rating
     #sql_r = text("SELECT rating FROM reviews WHERE restaurant_id = name")
     #result = db.session.execute(sql_r, {"name":name})
@@ -41,10 +38,11 @@ def show_restaurant(restaurant_id):
     return restaurant
 
 def delete_restaurant():
-    #check if admin
     name = request.form["name"]
-
     sql = text("UPDATE restaurants SET visible=0 WHERE name LIKE :name;")
     db.session.execute(sql, {"name": name})
     return db.session.commit()
+
+
+
 

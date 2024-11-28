@@ -24,7 +24,7 @@
 
 <h3>Arvioi ravintola</h3>
 
-<form action="//restaurant/<int:restaurant_id>" method="POST">
+<form action="/restaurant/{{ id }}" method="POST">
 Tähdet:
 <p>
 1 <input type="radio" name="rating" value="1">
@@ -39,4 +39,7 @@ Kommentti: <br>
 <p>
 <input type="submit" value="Lisää arvio">
 </form>
+
+<a href="/add_group/{{ id }}">Lisää ravintola ryhmään
+
 {% endblock %}

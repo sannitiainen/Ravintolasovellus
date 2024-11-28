@@ -1,0 +1,22 @@
+<h4>Lisää ryhmään</h4>
+
+<form action="/add_group/{{ restaurant_id }}" method="POST">
+    {% if groups %}
+        <ul>
+        {% for group in groups %}
+            <li>
+                <input type="checkbox" name="group_ids" value="{{ group.id }}"> {{ group.name }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Ryhmiä ei löytynyt</p>
+    {% endif %}
+    <p>
+    <input type="submit" value="Lisää ryhmään/ryhmiin">
+</form>
+
+<br>
+<a href="/add_new_group/{{ restaurant_id }}">Lisää uusi ryhmä</a>
+
+

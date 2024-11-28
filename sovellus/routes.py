@@ -1,7 +1,8 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
 from users import login, register, logout, become_admin, is_admin
-from restaurants import get_all_restaurants, search_restaurant, add_restaurant, delete_restaurant, show_restaurant
+from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant
+from groups import get_all_groups, add_group, add_restaurant_to_group
 from reviews import add_review
 
 # home page
@@ -54,9 +55,6 @@ def logout_route():
 
 @app.route("/add_restaurant", methods=["GET", "POST"])
 def add_restaurant_route():
-    if not is_admin():
-        flash("Sinulla ei ole oikeuksia tähän toimintoon")
-        return redirect("/")
     if request.method == "GET":
         return render_template("add_restaurant.html")
     if request.method == "POST":
@@ -84,6 +82,7 @@ def restaurant_info_route(restaurant_id):
     return render_template("restaurant_page.html", id = restaurant_id, name = info[0][1], address = info[0][3], openinghours = info[0][2], type = info[0][4])
 
 @app.route("/restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
+#MUUTA TÄTÄ!!
 def add_review_route(restaurant_id):
     if "user_id" not in session:
         flash("Kirjaudu sisään")
@@ -103,10 +102,6 @@ def add_review_route(restaurant_id):
 
 @app.route("/become_admin", methods = ["GET", "POST"])
 def become_admin_route():
-    if "user_id" not in session:
-        flash("Kirjaudu sisään")
-        return redirect("/login")
-    
     if request.method == "GET":
         return render_template("become_admin.html")
     
@@ -116,3 +111,31 @@ def become_admin_route():
             return redirect("/")
         else:
             flash("Jokin meni vikaan")
+
+@app.route("/add_group/<int:restaurant_id>", methods = ["GET", "POST"])
+def add_restaurant_to_group_route(restaurant_id):
+    if request.method == "GET":
+        return render_template("groups.html", restaurant_id=restaurant_id, groups = get_all_groups())
+    if request.method == "POST":
+        print("ok")
+        group_ids = request.form.getlist("group_ids")
+        for group_id in group_ids:
+            print(group_id)
+            if add_restaurant_to_group(restaurant_id, group_id):
+                flash("Ravintola lisätty valittuihin ryhmiin")
+            else:
+                flash("Ravintolaa ei lisätty mihinkään ryhmään")
+        return redirect("/restaurant/"+str(restaurant_id))
+                
+
+@app.route("/add_new_group/<int:restaurant_id>", methods = ["GET", "POST"])
+def add_group_route(restaurant_id):
+    if request.method == "GET":
+        return render_template("add_group.html", restaurant_id=restaurant_id)
+    if request.method == "POST":
+        name = request.form["name"]
+        if add_group(name):
+            flash("Ryhmä lisätty")
+            return redirect("/add_group/"+str(restaurant_id))
+        else:
+            flash("Ryhmää ei voitu lisätä")
