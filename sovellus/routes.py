@@ -78,10 +78,7 @@ def add_restaurant_route():
             flash("Ravintolan lisääminen ei onnistunut")
 
 
-#@app.route("/search", methods = ["GET"])
-#def search_route():
-    #render_template("search.html")
-    #pass
+
 
 @app.route("/restaurant/<int:restaurant_id>")
 def restaurant_info_route(restaurant_id):
