@@ -1,14 +1,20 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
 from users import login, register, logout, become_admin, is_admin
-from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant
+from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant
 from groups import get_all_groups, add_group, add_restaurant_to_group
 from reviews import add_review
 
 # home page
 @app.route("/")
 def index():
-    return render_template("index.html", restaurants = get_all_restaurants())
+    query = request.args.get("query")
+    if query:
+        results = search_restaurant(query)
+    else:
+        results = []
+    print(results)
+    return render_template("index.html", restaurants = get_all_restaurants(), search_results = results, query = query)
 
 # login/register
 
@@ -42,7 +48,7 @@ def register_route():
             return redirect("/register")
 
         else:
-            flash("Rekisteröinti onnistui! Kirjaudu sisään.")
+            flash("Rekisteröinti onnistui!")
             return redirect("/")
 
 
@@ -72,10 +78,10 @@ def add_restaurant_route():
             flash("Ravintolan lisääminen ei onnistunut")
 
 
-@app.route("/search", methods = ["GET"])
-def search_route():
+#@app.route("/search", methods = ["GET"])
+#def search_route():
     #render_template("search.html")
-    pass
+    #pass
 
 @app.route("/restaurant/<int:restaurant_id>")
 def restaurant_info_route(restaurant_id):

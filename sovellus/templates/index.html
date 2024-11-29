@@ -8,23 +8,36 @@
     <p>Tervetuloa sovellukseen!</p>
 
 <h4>Etsi Ravintolaa:</h4> 
-<form action="/result" method="GET">
+<form action="/" method="GET">
     Hakusana: <input type="text" name="query">
     <br>
     <input type="submit" value="Hae">
     </form>
 
-    <h4>Ravintolat:</h4> 
-    
-    {% if restaurants %}
-        <ul>
-        {% for restaurant in restaurants %}
-            <li><a href="/restaurant/{{ restaurant.id }}">{{ restaurant.name }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No restaurants found.</p>
-    {% endif %}
+<h5>Tulokset:</h5>
+{% if search_results %}
+<ul>
+{% for search_result in search_results %}
+    <li><a href="/restaurant/{{ search_result.id }}">{{ search_result.name }}</a></li>
+{% endfor %}
+</ul>
+{% else %}
+<p>Hakua vastaavia ravintoloita ei löytynyt.</p>
+{% endif %}
+
+
+
+<h4>Ravintolat:</h4> 
+
+{% if restaurants %}
+    <ul>
+    {% for restaurant in restaurants %}
+        <li><a href="/restaurant/{{ restaurant.id }}">{{ restaurant.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No restaurants found.</p>
+{% endif %}
 
 {% if session["user_role"] == "user" %}
 <a href="/become_admin">Ylläpitäjäksi
