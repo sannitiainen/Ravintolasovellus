@@ -7,6 +7,7 @@
 <li>Aukioloajat : {{ openinghours }}
 <li>Osoite : {{ address }}
 <li>Tyyppi : {{ type }}
+<li>Arvio : {{ avg_rating }}
 <li>Info : {{ info }}
 
 <br>
@@ -40,6 +41,9 @@ Kommentti: <br>
 <input type="submit" value="Lisää arvio">
 </form>
 
+{% if session["user_role"] == "admin" %}
 <a href="/add_group/{{ id }}">Lisää ravintola ryhmään
+<a href="/delete_restaurant/{{ id }}"> Poista ravintola
+{% endif %}
 
 {% endblock %}

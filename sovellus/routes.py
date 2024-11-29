@@ -63,8 +63,9 @@ def add_restaurant_route():
         opening_hours = request.form["openinghours"]
         info = request.form["info"]
         type = request.form["type"]
-        restaurant_id = add_restaurant(name, address, opening_hours, info, type)
-        if add_restaurant(name, address, opening_hours, info, type):
+        avg_rating = 0
+        restaurant_id = add_restaurant(name, address, opening_hours, info, avg_rating, type)
+        if add_restaurant(name, address, opening_hours, info, avg_rating, type):
             flash("Ravintolan lisääminen onnistui!")
             return redirect("/restaurant/"+str(restaurant_id))
         else:
@@ -78,8 +79,8 @@ def search_route():
 
 @app.route("/restaurant/<int:restaurant_id>")
 def restaurant_info_route(restaurant_id):
-    info = show_restaurant(restaurant_id)
-    return render_template("restaurant_page.html", id = restaurant_id, name = info[0][1], address = info[0][3], openinghours = info[0][2], type = info[0][4])
+    information = show_restaurant(restaurant_id)
+    return render_template("restaurant_page.html", id = restaurant_id, name = information[0][1], openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7])
 
 @app.route("/restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
 #MUUTA TÄTÄ!!
@@ -99,6 +100,17 @@ def add_review_route(restaurant_id):
             return redirect("/restaurant/"+{restaurant_id})
         else: 
             flash("Arvion lisääminen ei onnistunut")
+
+@app.route("/delete_restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
+def delete_restaurant_route(restaurant_id):
+    if delete_restaurant(restaurant_id):
+        flash("Ravintola poistettu")
+        return redirect("/")
+    else:
+        flash("Ravintolaa ei voitu poistaa.")
+        return redirect("/restaurant/"+str(restaurant_id))
+
+
 
 @app.route("/become_admin", methods = ["GET", "POST"])
 def become_admin_route():

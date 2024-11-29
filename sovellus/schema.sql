@@ -11,6 +11,7 @@ CREATE TABLE restaurants (
     openinghours TEXT,
     address TEXT,
     info TEXT,
+    visible INTEGER,
     avg_rating FLOAT,
     type TEXT
 );
