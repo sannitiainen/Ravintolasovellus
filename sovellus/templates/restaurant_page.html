@@ -2,6 +2,16 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li style="color: red;">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
 <h2>{{ name }}</h2>
 <ul>
 <li>Aukioloajat : {{ openinghours }}
@@ -13,16 +23,9 @@
 <br>
 <br>
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li style="color: red;">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
 
+
+{% if session.username %}
 <h3>Arvioi ravintola</h3>
 
 <form action="/restaurant/{{ id }}" method="POST">
@@ -40,9 +43,12 @@ Kommentti: <br>
 <p>
 <input type="submit" value="Lisää arvio">
 </form>
+{% endif %}
 
 {% if session["user_role"] == "admin" %}
 <a href="/add_group/{{ id }}">Lisää ravintola ryhmään
+<br>
+<br>
 <a href="/delete_restaurant/{{ id }}"> Poista ravintola
 {% endif %}
 
