@@ -14,27 +14,13 @@ def get_all_restaurants():
 # only administrator
 
 def add_restaurant(name, address, openinghours, info, avg_rating, type):
-    sql = text("INSERT INTO restaurants (name, openinghours, address, info, visible, type) VALUES (:name, :openinghours, :address, :info, :visible, :type);")
-    db.session.execute(sql, {"name": name, "openinghours": openinghours, "address": address, "info": info, "visible": 1, "type":type})
+    sql = text("INSERT INTO restaurants (name, openinghours, address, info, visible, avg_rating, type) VALUES (:name, :openinghours, :address, :info, :visible, :avg_rating, :type);")
+    db.session.execute(sql, {"name": name, "openinghours": openinghours, "address": address, "info": info, "visible": 1, "avg_rating": avg_rating, "type":type})
     db.session.commit()
 
     sql2 = text("SELECT id FROM restaurants WHERE name LIKE :name")
     restaurant_id_row = db.session.execute(sql2, {"name": name}).fetchone()
     restaurant_id = restaurant_id_row[0]
-
-    sql_r = text("SELECT rating FROM reviews WHERE restaurant_id = :restaurant_id")
-    result = db.session.execute(sql_r, {"restaurant_id": restaurant_id})
-    ratings = list(result.fetchall())
-
-    if len(ratings)>0:
-        avg_rating = sum(ratings)/len(ratings)
-    else:
-        avg_rating = None
-
-    sql_update = text("UPDATE restaurants SET avg_rating = :avg_rating WHERE id = :restaurant_id;")
-    db.session.execute(sql_update, {"avg_rating": avg_rating, "restaurant_id": restaurant_id})
-    db.session.commit()
-
 
     return restaurant_id
 

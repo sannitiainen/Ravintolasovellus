@@ -13,7 +13,6 @@ def index():
         results = search_restaurant(query)
     else:
         results = []
-    print(results)
     return render_template("index.html", restaurants = get_all_restaurants(), search_results = results, query = query)
 
 # login/register
@@ -77,9 +76,6 @@ def add_restaurant_route():
         else:
             flash("Ravintolan lisääminen ei onnistunut")
 
-
-
-
 @app.route("/restaurant/<int:restaurant_id>")
 def restaurant_info_route(restaurant_id):
     information = show_restaurant(restaurant_id)
@@ -132,10 +128,8 @@ def add_restaurant_to_group_route(restaurant_id):
     if request.method == "GET":
         return render_template("groups.html", restaurant_id=restaurant_id, groups = get_all_groups())
     if request.method == "POST":
-        print("ok")
         group_ids = request.form.getlist("group_ids")
         for group_id in group_ids:
-            print(group_id)
             if add_restaurant_to_group(restaurant_id, group_id):
                 flash("Ravintola lisätty valittuihin ryhmiin")
             else:
