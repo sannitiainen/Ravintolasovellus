@@ -15,33 +15,33 @@ Ominaisuuksia:
 
 Testausohjeet
 
-    Aluksi kloonaa repositorio
+Aluksi kloonaa repositorio
 
-git clone https://github.com/sannitiainen/Ravintolasovellus.git
+    git clone https://github.com/sannitiainen/Ravintolasovellus.git
 
-    Avaa kohdekansio Ravintolasovellus (cd)
-    Avaa kansio sovellus
+Avaa kohdekansio Ravintolasovellus (cd)
+Avaa kansio sovellus
 
-    Rakenna virtuaaliympäristö
+Rakenna virtuaaliympäristö
 
-python3 -m venv venv
+    python3 -m venv venv
 
-    Asenna esivaatimukset
+Asenna esivaatimukset
 
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
-    Avaa virtuaaliympäristö
+Avaa virtuaaliympäristö
 
-source venv/bin/activate
+    source venv/bin/activate
 
-    Avaa tietokanta uuteen terminaali-ikkunaan
+Avaa tietokanta uuteen terminaali-ikkunaan
 
-Start-pg.sh
+    Start-pg.sh
 
-    Luo tietokanta ajamalla uudessa terminaali-ikkunassa
+Luo tietokanta ajamalla uudessa terminaali-ikkunassa
 
-schema.sql psql < schema.sql
+    schema.sql psql < schema.sql
 
-    Käynnistä uuteen ikkunaan paikallinen sovellus
+Käynnistä uuteen ikkunaan paikallinen sovellus
 
-flask run --debug
+    flask run --debug
