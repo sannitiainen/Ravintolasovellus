@@ -19,8 +19,15 @@ Aluksi kloonaa repositorio
 
     git clone https://github.com/sannitiainen/Ravintolasovellus.git
 
-Avaa kohdekansio Ravintolasovellus (cd)
-Avaa kansio sovellus
+Luo kansioon .env-tiedosto ja määritä sen sisältö seuraavanlaiseksi:
+
+    DATABASE_URL=<tietokannan-paikallinen-osoite>
+    SECRET_KEY=<salainen-avain>
+
+Avaa kohdekansio Ravintolasovellus ja kansio sovellus
+
+    cd Ravintolasovellus
+    cd sovellus
 
 Rakenna virtuaaliympäristö
 
@@ -36,12 +43,22 @@ Avaa virtuaaliympäristö
 
 Avaa tietokanta uuteen terminaali-ikkunaan
 
-    Start-pg.sh
+    start-pg.sh
 
-Luo tietokanta ajamalla uudessa terminaali-ikkunassa
+Avaa Postgresql uudessa terminaalissa
 
-    schema.sql psql < schema.sql
+    psql
+
+Luo uusi tietokanta
+
+    CREATE DATABASE <tietokannan-nimi>;
+
+Määritä tietokantaskeema
+
+    psql -d <tietokannan-nimi> < schema.sql
+
+Määritä vielä tietokannan osoite projektille siten, että osoite päättyy luomasi tietokannan nimeen. Esimerkiksi, jos omalla sovelluksellasi osoite on muotoa postgresql:///user ja loit vertaisarviontia varten tietokannan nimeltä testi, tulisi uudeksi tietokannan osoitteeksi postgresql:///testi.
 
 Käynnistä uuteen ikkunaan paikallinen sovellus
 
-    flask run --debug
+    flask run
