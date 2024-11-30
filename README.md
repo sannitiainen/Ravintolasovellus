@@ -5,7 +5,6 @@ Sovelluksessa näkyy tietyn alueen ravintolat, joista voi etsiä tietoa ja lukea
 Ominaisuuksia:
 
 - Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
-- Käyttäjä näkee ravintolat kartalla ja voi painaa ravintolasta, jolloin siitä näytetään lisää tietoa (kuten kuvaus ja aukioloajat).
 - Käyttäjä voi antaa arvion (tähdet ja kommentti) ravintolasta ja lukea muiden antamia arvioita.
 - Ylläpitäjä voi lisätä ja poistaa ravintoloita sekä määrittää ravintolasta näytettävät tiedot.
 - Käyttäjä voi etsiä kaikki ravintolat, joiden kuvauksessa on annettu sana.
@@ -14,12 +13,35 @@ Ominaisuuksia:
 - Ylläpitäjä voi luoda ryhmiä, joihin ravintoloita voi luokitella. Ravintola voi kuulua yhteen tai useampaan ryhmään.
 
 
-Sovelluksen tilanne 17.11.
-- Sisään ja ulos kirjautuminen toimii, mutta pitää vielä muokata sitä hieman
-- Keskeisiä funktioita on aloitettu, mutta pitää vielä muokata ja työstää melko paljon
-    - mm. hakutoiminto, ravintoloiden lisääminen ja poistaminen, arvioiden lisääminen ja rekisteröityminen
-- Tietokantoja on luotu kolme; käyttäjät, ravintolat ja arvostelut
-- Koodi on jaettu eri tiedostoihin, jotka viittaavat toisiinsa
+Testausohjeet
 
-- Sovelluksessa ei vielä tässä vaiheessa ole oikein muita ominaisuuksia kuin sisään ja ulos kirjautuminen, joten paljoa siitä ei voi testata
-- Jos sovelluksen avaa omalla koneella, voi kirjautua sisään ja ulos, mutta ei tässä vaiheessa juuri muuta
+    Aluksi kloonaa repositorio
+
+git clone https://github.com/sannitiainen/Ravintolasovellus.git
+
+    Avaa kohdekansio Ravintolasovellus (cd)
+    Avaa kansio sovellus
+
+    Rakenna virtuaaliympäristö
+
+python3 -m venv venv
+
+    Asenna esivaatimukset
+
+pip install -r requirements.txt
+
+    Avaa virtuaaliympäristö
+
+source venv/bin/activate
+
+    Avaa tietokanta uuteen terminaali-ikkunaan
+
+Start-pg.sh
+
+    Luo tietokanta ajamalla uudessa terminaali-ikkunassa
+
+schema.sql psql < schema.sql
+
+    Käynnistä uuteen ikkunaan paikallinen sovellus
+
+flask run --debug
