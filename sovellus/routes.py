@@ -94,13 +94,13 @@ def add_review_route(restaurant_id):
     if request.method == "GET":
         return render_template("restaurant_page.html")
     if request.method == "POST":
-        name = request.form["name"]
         rating = request.form["rating"]
         comment = request.form["comment"]
-        restaurant_id = add_review(name, rating, comment)
-        if add_review(name, rating, comment):
+        user_id = session["user_id"]
+        restaurant_id = restaurant_id
+        if add_review(user_id, restaurant_id, rating, comment):
             flash("Arvion lisääminen onnistui!")
-            return redirect("/restaurant/"+{restaurant_id})
+            return redirect("/restaurant/"+str(restaurant_id))
         else: 
             flash("Arvion lisääminen ei onnistunut")
 

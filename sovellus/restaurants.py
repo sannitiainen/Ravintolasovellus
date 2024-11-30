@@ -26,7 +26,7 @@ def add_restaurant(name, address, openinghours, info, avg_rating, type):
     result = db.session.execute(sql_r, {"restaurant_id": restaurant_id})
     ratings = list(result.fetchall())
 
-    if ratings:
+    if len(ratings)>0:
         avg_rating = sum(ratings)/len(ratings)
     else:
         avg_rating = None
