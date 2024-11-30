@@ -17,6 +17,21 @@ def get_all_groups():
     sql = text("SELECT id, name FROM groups ORDER BY name")
     return db.session.execute(sql).fetchall()
 
+def get_restaurants_groups(restaurant_id):
+    sql = text("SELECT group_id FROM map_group WHERE restaurant_id = :restaurant_id")
+    groups = db.session.execute(sql, {"restaurant_id": restaurant_id}).fetchall()
+    names = []
+    for group in groups:
+        group_id = group[0]
+        sql_name = text("SELECT name FROM groups WHERE id = :group_id")
+        name = db.session.execute(sql_name, {"group_id": group_id}).fetchone()[0]
+        names.append({"name": name})
+
+    return names
+
+
+
+
 def add_restaurant_to_group(restaurant_id, group_id):
     sql = text("INSERT INTO map_group (restaurant_id, group_id) VALUES (:restaurant_id, :group_id)")
     db.session.execute(sql, {"restaurant_id": restaurant_id, "group_id": group_id})

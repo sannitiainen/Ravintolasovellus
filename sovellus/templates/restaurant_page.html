@@ -20,6 +20,18 @@
 <li>Arvio : {{ avg_rating }}
 <li>Info : {{ info }}
 
+
+{% if groups %}
+<li>Ryhmät :
+<ul>
+{% for group in groups %}
+    <li>
+        {{ group.name }}
+    </li>
+{% endfor %}
+</ul>
+{% endif %}
+
 <br>
 <br>
 
