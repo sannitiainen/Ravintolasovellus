@@ -37,6 +37,22 @@ def update_rating(restaurant_id):
 
     return avg_rating
 
+def list_reviews(restaurant_id):
+    sql = text("SELECT user_id, rating, comment FROM reviews WHERE restaurant_id = :restaurant_id;")
+    result = db.session.execute(sql, {"restaurant_id": restaurant_id})
+    reviews = list(result.fetchall())
+
+    review_list = []
+
+    for review in reviews:
+        id = review[0]
+        sql_username = text("SELECT username FROM users WHERE id = :id")
+        u_name = db.session.execute(sql_username, {"id": id}).fetchone()[0]
+        review_list.append({"username": u_name, "rating": review[1], "comment": review[2]})
+
+    return review_list
+
+
 def delete_review():
     #only if admin
     pass

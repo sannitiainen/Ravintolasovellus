@@ -3,7 +3,7 @@ from flask import redirect, render_template, request, session, flash
 from users import login, register, logout, become_admin, is_admin
 from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant
 from groups import get_all_groups, add_group, add_restaurant_to_group
-from reviews import add_review
+from reviews import add_review, list_reviews
 
 # home page
 @app.route("/")
@@ -79,7 +79,7 @@ def add_restaurant_route():
 @app.route("/restaurant/<int:restaurant_id>")
 def restaurant_info_route(restaurant_id):
     information = show_restaurant(restaurant_id)
-    return render_template("restaurant_page.html", id = restaurant_id, name = information[0][1], openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7])
+    return render_template("restaurant_page.html", id = restaurant_id, name = information[0][1], openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7], reviews = list_reviews(restaurant_id))
 
 @app.route("/restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
 #MUUTA TÄTÄ!!

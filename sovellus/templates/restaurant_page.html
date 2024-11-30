@@ -45,6 +45,25 @@ Kommentti: <br>
 </form>
 {% endif %}
 
+<h3>Arvostelut:</h3>
+{% if reviews %}
+    <ul>
+    {% for review in reviews %}
+        <li>
+            <strong>Arvosana:</strong> {{ review.rating }} / 5<br>
+            <br>
+            <strong>Kommentti:</strong> {{ review.comment }}<br>
+            <br>
+            <em>Käyttäjältä {{ review.username }}</em>
+        </li>
+        <br>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Ei vielä arvosteluja.</p>
+{% endif %}
+<br>
+
 {% if session["user_role"] == "admin" %}
 <a href="/add_group/{{ id }}">Lisää ravintola ryhmään
 <br>
