@@ -13,7 +13,6 @@ def login(username, password):
     sql = text("SELECT id, password, admin FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
-    print(user)
     if not user:
         return False
     else:
@@ -27,7 +26,6 @@ def login(username, password):
 
 
 def register(username, password):
-    #check username
     sql = text("SELECT username FROM users;")
     username_list = db.session.execute(sql).fetchall()
     if username not in username_list:

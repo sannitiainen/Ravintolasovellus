@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    name TEXT UNIQUE, 
+    username TEXT UNIQUE, 
     password TEXT, 
     admin INTEGER
 );
@@ -33,11 +33,11 @@ CREATE TABLE favorites (
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    creator INTEGER REFERENCES users
+    creator_id INTEGER REFERENCES users
 );
 
 CREATE TABLE map_groups (
     id SERIAL PRIMARY KEY,
-    restaurant_id INTEGER REFERENCES restaurants
+    restaurant_id INTEGER REFERENCES restaurants,
     group_id INTEGER REFERENCES groups
 );
