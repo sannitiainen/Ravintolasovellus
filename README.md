@@ -12,17 +12,18 @@ Ominaisuuksia:
 - Ylläpitäjä voi tarvittaessa poistaa käyttäjän antaman arvion.
 - Ylläpitäjä voi luoda ryhmiä, joihin ravintoloita voi luokitella. Ravintola voi kuulua yhteen tai useampaan ryhmään.
 
+Tilanne 1.12.
+- Joitain toimintoja puutuu vielä esim. kommentin poisto ja ylläpitäjän mahdollisuus määrittää mitkä tiedot ravintolasta näytetään
+- Tietokantoja on kuusi, joista yhtä ei vielä käytetä, mutta sitä tullaan käyttmään lopullisessa versiossa
+- Pääosin toiminnot ovat kunnossa ja toimivat, vaativat ehkä pientä hiontaa
+- Ulkoasu on melko alkeellinen, sitä pitää vielä hioa
+
 
 Testausohjeet
 
 Aluksi kloonaa repositorio
 
     git clone https://github.com/sannitiainen/Ravintolasovellus.git
-
-Luo kansioon .env-tiedosto ja määritä sen sisältö seuraavanlaiseksi:
-
-    DATABASE_URL=<tietokannan-paikallinen-osoite>
-    SECRET_KEY=<salainen-avain>
 
 Avaa kohdekansio Ravintolasovellus ja kansio sovellus
 
@@ -41,11 +42,11 @@ Avaa virtuaaliympäristö
 
     source venv/bin/activate
 
-Avaa tietokanta uuteen terminaali-ikkunaan
+Avaa uusi terminaali-ikkuna ja käynnistä tietokanta
 
     start-pg.sh
 
-Avaa Postgresql uudessa terminaalissa
+Avaa uusi terminaali-ikkuna ja käynnistä Postgresql siellä
 
     psql
 
@@ -53,11 +54,19 @@ Luo uusi tietokanta
 
     CREATE DATABASE <tietokannan-nimi>;
 
-Määritä tietokantaskeema
+Voit sulkea psql-terminaalin
+
+Määritä tietokantaskeema virtuaaliympäristössä sovellus-kansiossa
 
     psql -d <tietokannan-nimi> < schema.sql
 
-Määritä vielä tietokannan osoite projektille siten, että osoite päättyy luomasi tietokannan nimeen. Esimerkiksi, jos omalla sovelluksellasi osoite on muotoa postgresql:///user ja loit vertaisarviontia varten tietokannan nimeltä testi, tulisi uudeksi tietokannan osoitteeksi postgresql:///testi.
+Luo kansioon .env-tiedosto ja määritä sen sisältö seuraavanlaiseksi:
+
+    DATABASE_URL=<tietokannan-paikallinen-osoite>
+    SECRET_KEY=<salainen-avain>
+
+<tietokannan-paikallinen-osoite>: Määritä tietokannan osoite projektille siten, että osoite päättyy luomasi tietokannan nimeen. Esimerkiksi, jos omalla sovelluksellasi osoite on muotoa postgresql:///user ja loit vertaisarviontia varten tietokannan nimeltä testi, tulisi uudeksi tietokannan osoitteeksi postgresql:///testi.
+<salainen-avain> Määritä itse jokin numerosarja
 
 Käynnistä uuteen ikkunaan paikallinen sovellus
 
