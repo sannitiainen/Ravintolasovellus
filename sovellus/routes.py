@@ -34,13 +34,20 @@ def login_route():
 def register_route():
     if request.method == "GET":
         return render_template("register.html")
+    
     if request.method == "POST":
+
         username = request.form["username"]
+        if len(username) < 5 or len(username) > 15:
+            flash("Käyttäjätunnnuksen tulee olla 5-15 merkkiä pitkä")
+        
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
             flash("Salasanat eroavat.")
-            return redirect("/register")
+        if len(password1)< 5:
+            flash("Salasanan tulee olla yli 5 merkkiä pitkä")
+            
         
         if not register(username, password1):
             flash("Rekisteröinti ei onnistunut")
@@ -64,13 +71,36 @@ def add_restaurant_route():
         return render_template("add_restaurant.html")
     if request.method == "POST":
         name = request.form["name"]
+        if len(name)<1:
+            flash("Anna ravintolalle nimi")
+        if len(name)>30:
+            flash("Nimi on liian pitkä")
+
         address = request.form["address"]
+        if address == "":
+            address = "ei tietoa"
+        if len(address) > 30:
+            flash("Osoite saa olla korkeintaan 30 merkkiä")
+
         opening_hours = request.form["openinghours"]
+        if opening_hours == "":
+            opening_hours = "ei tietoa"
+        if len(opening_hours) > 50:
+            flash("Aukioloajassa saa olla korkeintaan 50 merkkiä")
+
         info = request.form["info"]
+        if info == "":
+            info = "-"
+        if len(info) > 1000:
+            flash("Info saa olla korkeintaan 1000 merkkiä")
+
         type = request.form["type"]
+        if type == "":
+            type = "ei tietoa"
+
         avg_rating = 0
         restaurant_id = add_restaurant(name, address, opening_hours, info, avg_rating, type)
-        if add_restaurant(name, address, opening_hours, info, avg_rating, type):
+        if restaurant_id:
             flash("Ravintolan lisääminen onnistui!")
             return redirect("/restaurant/"+str(restaurant_id))
         else:
@@ -90,8 +120,15 @@ def add_review_route(restaurant_id):
     if request.method == "GET":
         return render_template("restaurant_page.html")
     if request.method == "POST":
+
         rating = request.form["rating"]
+        if rating > 5:
+            flash("Varmista että arvio on välillä 1-5")
+
         comment = request.form["comment"]
+        if len(comment) < 1:
+            comment = "ei kommenttia"
+
         user_id = session["user_id"]
         restaurant_id = restaurant_id
         if add_review(user_id, restaurant_id, rating, comment):
@@ -143,6 +180,13 @@ def add_group_route(restaurant_id):
         return render_template("add_group.html", restaurant_id=restaurant_id)
     if request.method == "POST":
         name = request.form["name"]
+
+        if len(name)<1:
+            flash("Anna ryhmälle nimi")
+        if len(name)>30:
+            flash("Nimi on liian pitkä")
+            return redirect("/add_group/"+str(restaurant_id))
+
         if add_group(name):
             flash("Ryhmä lisätty")
             return redirect("/add_group/"+str(restaurant_id))
