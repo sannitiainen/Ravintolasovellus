@@ -16,5 +16,6 @@ Info: <input type="text" name="info">
 Tyyppi <input type="text" name="type">
 <p>
 <input type="submit" value="Lisää ravintola">
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 {% endblock %}

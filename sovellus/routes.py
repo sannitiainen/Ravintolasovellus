@@ -1,5 +1,5 @@
 from app import app
-from flask import redirect, render_template, request, session, flash
+from flask import redirect, render_template, request, session, flash, abort
 from users import login, register, logout, become_admin, become_user
 from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name
 from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups
@@ -29,13 +29,15 @@ def login_route():
         else:
             flash("Väärä tunnus tai salasana")
             return redirect("/login")
-
+        
 @app.route("/register", methods = ["GET", "POST"])
 def register_route():
     if request.method == "GET":
         return render_template("register.html")
     
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
 
         username = request.form["username"]
         if len(username) < 5 or len(username) > 15:
@@ -73,6 +75,9 @@ def add_restaurant_route():
     if request.method == "GET":
         return render_template("add_restaurant.html")
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+
         name = request.form["name"]
         if len(name)<1:
             flash("Anna ravintolalle nimi")
@@ -119,34 +124,6 @@ def restaurant_info_route(restaurant_id):
     information = show_restaurant(restaurant_id)
     return render_template("restaurant_page.html", id = restaurant_id, name = information[0][1], openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7], reviews = list_reviews(restaurant_id), groups = get_restaurants_groups(restaurant_id))
 
-@app.route("/restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
-def add_review_route(restaurant_id):
-    if "user_id" not in session:
-        flash("Kirjaudu sisään")
-        return redirect("/login")
-    if request.method == "GET":
-        return render_template("restaurant_page.html")
-    if request.method == "POST":
-
-        rating = request.form["rating"]
-        if int(rating) > 5 or int(rating) < 1:
-            flash("Varmista että arvio on välillä 1-5")
-            return redirect("/restaurant/"+str(restaurant_id))
-
-        comment = request.form["comment"]
-        if len(comment) < 1:
-            comment = "ei kommenttia"
-        if len(comment) > 1000:
-            flash("Kommentti saa olla enintään 1000 merkkiä")
-            return redirect("/restaurant/"+str(restaurant_id))
-
-        user_id = session["user_id"]
-        if add_review(user_id, restaurant_id, rating, comment):
-            flash("Arvion lisääminen onnistui!")
-            return redirect("/restaurant/"+str(restaurant_id))
-        else: 
-            flash("Arvion lisääminen ei onnistunut")
-
 @app.route("/delete_restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
 def delete_restaurant_route(restaurant_id):
     if delete_restaurant(restaurant_id):
@@ -161,6 +138,8 @@ def change_info_route(restaurant_id):
     if request.method == "GET":
         return render_template("change_info.html", name = get_name(restaurant_id), id = restaurant_id)
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
 
         address = request.form["address"]
         if address == "":
@@ -193,7 +172,41 @@ def change_info_route(restaurant_id):
         else:
             flash("Tietojen päivittäminen ei onnistunut")
             return redirect("/change_info_restaurant/"+str(restaurant_id))
+        
+#reviews
 
+@app.route("/restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
+def add_review_route(restaurant_id):
+    if "user_id" not in session:
+        flash("Kirjaudu sisään")
+        return redirect("/login")
+    if request.method == "GET":
+        return render_template("restaurant_page.html")
+    if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+
+        rating = request.form["rating"]
+        if int(rating) > 5 or int(rating) < 1:
+            flash("Varmista että arvio on välillä 1-5")
+            return redirect("/restaurant/"+str(restaurant_id))
+
+        comment = request.form["comment"]
+        if len(comment) < 1:
+            comment = "ei kommenttia"
+        if len(comment) > 1000:
+            flash("Kommentti saa olla enintään 1000 merkkiä")
+            return redirect("/restaurant/"+str(restaurant_id))
+
+        user_id = session["user_id"]
+        if add_review(user_id, restaurant_id, rating, comment):
+            flash("Arvion lisääminen onnistui!")
+            return redirect("/restaurant/"+str(restaurant_id))
+        else: 
+            flash("Arvion lisääminen ei onnistunut")
+
+
+# admin/user
 
 @app.route("/become_admin", methods = ["GET", "POST"])
 def become_admin_route():
@@ -201,6 +214,9 @@ def become_admin_route():
         return render_template("become_admin.html")
 
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+
         if become_admin():
             flash("Olet nyt ylläpitäjä")
             return redirect("/")
@@ -213,17 +229,25 @@ def become_user_route():
         return render_template("become_user.html")
 
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+
         if become_user():
             flash("Olet nyt tavallinen käyttäjä")
             return redirect("/")
         else:
             flash("Jokin meni vikaan")
 
+#groups
+
 @app.route("/add_group/<int:restaurant_id>", methods = ["GET", "POST"])
 def add_restaurant_to_group_route(restaurant_id):
     if request.method == "GET":
         return render_template("groups.html", restaurant_id=restaurant_id, groups = get_all_groups())
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+
         group_ids = request.form.getlist("group_ids")
         for group_id in group_ids:
             if add_restaurant_to_group(restaurant_id, group_id):
@@ -238,6 +262,9 @@ def add_group_route(restaurant_id):
     if request.method == "GET":
         return render_template("add_group.html", restaurant_id=restaurant_id)
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+
         name = request.form["name"]
 
         if len(name)<1:
