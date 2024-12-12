@@ -130,7 +130,7 @@ def add_review_route(restaurant_id):
     if request.method == "POST":
 
         rating = request.form["rating"]
-        if rating > 5:
+        if int(rating) > 5:
             flash("Varmista että arvio on välillä 1-5")
 
         comment = request.form["comment"]
