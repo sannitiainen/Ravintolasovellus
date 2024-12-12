@@ -1,3 +1,4 @@
+
 <!doctype html>
 <title>Ravintolasovellus - {% block title %}{% endblock %}</title>
 <h1>Ravintolasovellus</h1>
@@ -7,7 +8,10 @@
 <a href="/add_restaurant">Lisää uusi ravintola</a>
 {% endif %}
 
-</a>
+{% if session["user_role"] == "user" %}
+<a href="/become_admin">Ylläpitäjäksi</a>
+{% endif %}
+
 {% if session.username %}
 <p>Olet kirjautunut nimellä {{ session.username }}</p>
 <a href="/logout">Kirjaudu ulos</a>

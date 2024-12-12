@@ -36,7 +36,7 @@ CREATE TABLE groups (
     creator_id INTEGER REFERENCES users
 );
 
-CREATE TABLE map_groups (
+CREATE TABLE map_group (
     id SERIAL PRIMARY KEY,
     restaurant_id INTEGER REFERENCES restaurants,
     group_id INTEGER REFERENCES groups

@@ -29,6 +29,18 @@ def show_restaurant(restaurant_id):
     restaurant = db.session.execute(sql, {"id": restaurant_id}).fetchall()
     return restaurant
 
+def modify_information(restaurant_id, address, opening_hours, info, type):
+    sql = text("UPDATE restaurants SET address = :address, openinghours = :openinghours, info = :info, type = :type WHERE id = :id")
+    db.session.execute(sql, {"address": address, "openinghours": opening_hours, "info": info,"type": type,"id": restaurant_id})
+    db.session.commit()
+    return True
+
+def get_name(restaurant_id):
+    sql2 = text("SELECT name FROM restaurants WHERE id = :id")
+    restaurant_name_row = db.session.execute(sql2, {"id": restaurant_id}).fetchone()
+    restaurant_name = restaurant_name_row[0]
+    return restaurant_name
+
 def delete_restaurant(restaurant_id):
     sql = text("UPDATE restaurants SET visible=0 WHERE id = :restaurant_id;")
     db.session.execute(sql, {"restaurant_id": restaurant_id})

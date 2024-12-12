@@ -1,0 +1,23 @@
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li style="color: red;">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<h2>{{ name }}</h2>
+
+<form action="/change_info_restaurant/{{ id }}" method="POST">
+Osoite: <input type="text" name="address">
+<p>
+Aukioloajat: <input type="text" name="openinghours">
+<p>
+Info: <input type="text" name="info">
+<p>
+Tyyppi <input type="text" name="type">
+<p>
+<input type="submit" value="Päivitä tiedot">
+</form>

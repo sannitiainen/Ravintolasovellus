@@ -1,7 +1,7 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
 from users import login, register, logout, become_admin, is_admin
-from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant
+from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name
 from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups
 from reviews import add_review, list_reviews
 
@@ -40,13 +40,16 @@ def register_route():
         username = request.form["username"]
         if len(username) < 5 or len(username) > 15:
             flash("Käyttäjätunnnuksen tulee olla 5-15 merkkiä pitkä")
+            return redirect("/register")
         
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
             flash("Salasanat eroavat.")
+            return redirect("/register")
         if len(password1)< 5:
             flash("Salasanan tulee olla yli 5 merkkiä pitkä")
+            return redirect("/register")
             
         
         if not register(username, password1):
@@ -73,26 +76,31 @@ def add_restaurant_route():
         name = request.form["name"]
         if len(name)<1:
             flash("Anna ravintolalle nimi")
+            return redirect("/add_restaurant")
         if len(name)>30:
             flash("Nimi on liian pitkä")
+            return redirect("/add_restaurant")
 
         address = request.form["address"]
         if address == "":
             address = "ei tietoa"
         if len(address) > 30:
             flash("Osoite saa olla korkeintaan 30 merkkiä")
+            return redirect("/add_restaurant")
 
         opening_hours = request.form["openinghours"]
         if opening_hours == "":
             opening_hours = "ei tietoa"
         if len(opening_hours) > 50:
             flash("Aukioloajassa saa olla korkeintaan 50 merkkiä")
+            return redirect("/add_restaurant")
 
         info = request.form["info"]
         if info == "":
             info = "-"
         if len(info) > 1000:
             flash("Info saa olla korkeintaan 1000 merkkiä")
+            return redirect("/add_restaurant")
 
         type = request.form["type"]
         if type == "":
@@ -145,14 +153,51 @@ def delete_restaurant_route(restaurant_id):
     else:
         flash("Ravintolaa ei voitu poistaa.")
         return redirect("/restaurant/"+str(restaurant_id))
+    
+@app.route("/change_info_restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
+def change_info_route(restaurant_id):
+    if request.method == "GET":
+        return render_template("change_info.html", name = get_name(restaurant_id), id = restaurant_id)
+    if request.method == "POST":
 
+        address = request.form["address"]
+        if address == "":
+            address = "ei tietoa"
+        if len(address) > 30:
+            flash("Osoite saa olla korkeintaan 30 merkkiä")
+            return redirect("/change_info_restaurant/"+str(restaurant_id))
+
+        opening_hours = request.form["openinghours"]
+        if opening_hours == "":
+            opening_hours = "ei tietoa"
+        if len(opening_hours) > 50:
+            flash("Aukioloajassa saa olla korkeintaan 50 merkkiä")
+            return redirect("/change_info_restaurant/"+str(restaurant_id))
+
+        info = request.form["info"]
+        if info == "":
+            info = "-"
+        if len(info) > 1000:
+            flash("Info saa olla korkeintaan 1000 merkkiä")
+            return redirect("/change_info_restaurant/"+str(restaurant_id))
+
+        type = request.form["type"]
+        if type == "":
+            type = "ei tietoa"
+
+        if modify_information(restaurant_id, address, opening_hours, info, type):
+            flash("Tietojen päivittäminen onnistui!")
+            return redirect("/restaurant/"+str(restaurant_id))
+        else:
+            flash("Tietojen päivittäminen ei onnistunut")
+            return redirect("/change_info_restaurant/"+str(restaurant_id))
 
 
 @app.route("/become_admin", methods = ["GET", "POST"])
 def become_admin_route():
     if request.method == "GET":
         return render_template("become_admin.html")
-    
+
     if request.method == "POST":
         if become_admin():
             flash("Olet nyt ylläpitäjä")
