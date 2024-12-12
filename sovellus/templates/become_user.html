@@ -3,11 +3,11 @@
 {% block content %}
 
 <h2>Ylläpitäjäoikeuden poisto:</h2>
-<p>Oletko varma, että tahdot siirtyä takaisin tavalliseksi käyttäjäksi?</p>
+<p>Oletko varma, että tahdot siirtyä takaisin tavalliseksi käyttäjäksi? Menetät ylläpitäjän oikeudet, jos poistut ylläpitäjätilasta.</p>
 
 
 <form method="POST">
-<button type="submit">Hyväksyn</button>
+<button type="submit">Olen varma</button>
 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 

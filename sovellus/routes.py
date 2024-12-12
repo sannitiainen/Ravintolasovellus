@@ -77,6 +77,9 @@ def add_restaurant_route():
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
+        if "user_id" not in session:
+            flash("Kirjaudu sisään")
+            return redirect("/login")
 
         name = request.form["name"]
         if len(name)<1:
@@ -129,6 +132,9 @@ def restaurant_info_route(restaurant_id):
 
 @app.route("/delete_restaurant/<int:restaurant_id>")
 def delete_restaurant_route(restaurant_id):
+    if "user_id" not in session:
+        flash("Kirjaudu sisään")
+        return redirect("/login")
     if delete_restaurant(restaurant_id):
         flash("Ravintola poistettu")
         return redirect("/")
@@ -139,10 +145,14 @@ def delete_restaurant_route(restaurant_id):
 @app.route("/change_info_restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
 def change_info_route(restaurant_id):
     if request.method == "GET":
-        return render_template("change_info.html", name = get_name(restaurant_id), id = restaurant_id)
+        information = show_restaurant(restaurant_id)
+        return render_template("change_info.html", name = get_name(restaurant_id), id = restaurant_id, openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7], reviews = list_reviews(restaurant_id), groups = get_restaurants_groups(restaurant_id))
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
+        if "user_id" not in session:
+            flash("Kirjaudu sisään")
+            return redirect("/login")
 
         address = request.form["address"]
         if address == "":
@@ -231,6 +241,9 @@ def become_admin_route():
         return render_template("become_admin.html")
 
     if request.method == "POST":
+        if "user_id" not in session:
+            flash("Kirjaudu sisään")
+            return redirect("/login")
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
 
@@ -246,6 +259,9 @@ def become_user_route():
         return render_template("become_user.html")
 
     if request.method == "POST":
+        if "user_id" not in session:
+            flash("Kirjaudu sisään")
+            return redirect("/login")
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
 
@@ -262,6 +278,9 @@ def add_restaurant_to_group_route(restaurant_id):
     if request.method == "GET":
         return render_template("groups.html", restaurant_id=restaurant_id, groups = get_all_groups())
     if request.method == "POST":
+        if "user_id" not in session:
+            flash("Kirjaudu sisään")
+            return redirect("/login")
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
 
@@ -281,6 +300,9 @@ def add_group_route(restaurant_id):
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
+        if "user_id" not in session:
+            flash("Kirjaudu sisään")
+            return redirect("/login")
 
         name = request.form["name"]
 

@@ -22,7 +22,10 @@
     {% else %}
     <a href="/login">Kirjaudu sisään</a>
     {% endif %}
+
+    {% if session.username %}
     <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    {% endif %}
     
     {% with messages = get_flashed_messages() %}
     {% if messages %}

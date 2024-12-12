@@ -3,11 +3,11 @@
 {% block content %}
 
 <h2>Ylläpitäjän oikeudet ja velvollisuudet:</h2>
-<p>Ylläpitäjänä pystyt muokkaamaan ravintolan tietoja, lisäämään ja poistamaan ravintoloita sovelluksesta ja lisäämään ravintoloita ryhmiin. Ylläpitäjänä sitoudut kohtelemaan kaikkia reilusti ja toimimaan kaikkien parhaaksi.</p>
+<p>Ylläpitäjänä pystyt muokkaamaan ravintolan tietoja ja määrittämään mitkä niistä on määritetty, lisäämään ja poistamaan ravintoloita sovelluksesta ja lisäämään ravintoloita ryhmiin. Voit myös poistaa käyttäjien antamia arvioita ravintoloista. Ylläpitäjänä sitoudut kohtelemaan kaikkia reilusti ja toimimaan kaikkien parhaaksi.</p>
 
 
 <form method="POST">
-<button type="submit">Hyväksyn</button>
+<button type="submit">Hyväksyn ehdot</button>
 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 
