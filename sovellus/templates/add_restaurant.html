@@ -1,15 +1,9 @@
+{% extends "layout.html" %}
 
+{% block title %}Lisää Ravintola{% endblock %}
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li style="color: red;">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-
+{% block content %}
+<h2>Lisää Uusi Ravintola</h2>
 <form action="/add_restaurant" method="POST">
 Nimi: <input type="text" name="name">
 <p>
@@ -23,3 +17,4 @@ Tyyppi <input type="text" name="type">
 <p>
 <input type="submit" value="Lisää ravintola">
 </form>
+{% endblock %}

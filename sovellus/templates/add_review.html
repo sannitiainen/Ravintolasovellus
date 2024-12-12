@@ -1,13 +1,6 @@
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li style="color: red;">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+{% extends "layout.html" %}
 
+{% block content %}
 <form action="/restaurant/<int:restaurant_id>" method="POST">
 Tähdet:
 <p>
@@ -23,3 +16,4 @@ Kommentti: <br>
 <p>
 <input type="submit" value="Lisää arvio">
 </form>
+{% endblock %}

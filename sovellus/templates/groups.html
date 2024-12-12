@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+
+{% block content %}
 <h4>Lisää ryhmään</h4>
 
 <form action="/add_group/{{ restaurant_id }}" method="POST">
@@ -18,5 +21,5 @@
 
 <br>
 <a href="/add_new_group/{{ restaurant_id }}">Lisää uusi ryhmä</a>
-
+{% endblock %}
 

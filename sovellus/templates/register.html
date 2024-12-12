@@ -1,15 +1,7 @@
 
+{% extends "layout.html" %}
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li style="color: red;">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-
+{% block content %}
 <form action="/register" method="post">
 Tunnus: <input type="text" name="username">
 <p>
@@ -19,6 +11,6 @@ Salasana uudestaan: <input type="password" name="password2">
 <p>
 <input type="submit" value="Luo tunnus">
 </form>
-
+{% endblock %}
 
 
