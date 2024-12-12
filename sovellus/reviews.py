@@ -18,18 +18,9 @@ def add_review(user_id, restaurant_id, rating, comment):
     return restaurant_id
 
 def update_rating(restaurant_id):
-    sql = text("SELECT rating FROM reviews WHERE restaurant_id = :restaurant_id")
+    sql = text("SELECT AVG(rating) AS avg_rating FROM reviews WHERE restaurant_id = :restaurant_id")
     result = db.session.execute(sql, {"restaurant_id": restaurant_id})
-    ratings_list = list(result.fetchall())
-
-    ratings = []
-    for rating in ratings_list:
-        ratings.append(rating[0])
-
-    if len(ratings)>0:
-        avg_rating = round(sum(ratings)/len(ratings), 2)
-    else:
-        avg_rating = None
+    avg_rating = result.fetchone().avg_rating
 
     sql_update = text("UPDATE restaurants SET avg_rating = :avg_rating WHERE id = :restaurant_id;")
     db.session.execute(sql_update, {"avg_rating": avg_rating, "restaurant_id": restaurant_id})

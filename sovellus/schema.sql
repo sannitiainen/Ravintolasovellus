@@ -25,12 +25,6 @@ CREATE TABLE reviews (
     visible INTEGER
 );
 
-CREATE TABLE favorites (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users,
-    restaurant_id INTEGER REFERENCES restaurants
-);
-
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name TEXT,

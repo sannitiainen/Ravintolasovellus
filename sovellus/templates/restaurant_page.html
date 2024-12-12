@@ -4,11 +4,27 @@
 
 <h2>{{ name }}</h2>
 <ul>
+{% if openinghours is not none %}
 <li>Aukioloajat : {{ openinghours }}
+{% endif %}
+
+{% if address is not none %}
 <li>Osoite : {{ address }}
+{% endif %}
+
+{% if type is not none %}
 <li>Tyyppi : {{ type }}
+{% endif %}
+
+{% if avg_rating is not none %}
 <li>Arvio : {{ avg_rating }}
+{% else %}
+<li>Arvio : 0
+{% endif %}
+
+{% if info is not none %}
 <li>Info : {{ info }}
+{% endif %}
 
 
 {% if groups %}

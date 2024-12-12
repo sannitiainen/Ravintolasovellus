@@ -88,28 +88,31 @@ def add_restaurant_route():
 
         address = request.form["address"]
         if address == "":
-            address = "ei tietoa"
-        if len(address) > 30:
-            flash("Osoite saa olla korkeintaan 30 merkkiä")
-            return redirect("/add_restaurant")
+            address = None
+        if address is not None:
+            if len(address) > 30:
+                flash("Osoite saa olla korkeintaan 30 merkkiä")
+                return redirect("/add_restaurant")
 
         opening_hours = request.form["openinghours"]
         if opening_hours == "":
-            opening_hours = "ei tietoa"
-        if len(opening_hours) > 50:
-            flash("Aukioloajassa saa olla korkeintaan 50 merkkiä")
-            return redirect("/add_restaurant")
+            opening_hours = None
+        if opening_hours is not None:
+            if len(opening_hours) > 50:
+                flash("Aukioloajassa saa olla korkeintaan 50 merkkiä")
+                return redirect("/add_restaurant")
 
         info = request.form["info"]
         if info == "":
-            info = "-"
-        if len(info) > 1000:
-            flash("Info saa olla korkeintaan 1000 merkkiä")
-            return redirect("/add_restaurant")
+            info = None
+        if info is not None:
+            if len(info) > 1000:
+                flash("Info saa olla korkeintaan 1000 merkkiä")
+                return redirect("/add_restaurant")
 
         type = request.form["type"]
         if type == "":
-            type = "ei tietoa"
+            type = None
 
         avg_rating = 0
         restaurant_id = add_restaurant(name, address, opening_hours, info, avg_rating, type)
@@ -143,28 +146,31 @@ def change_info_route(restaurant_id):
 
         address = request.form["address"]
         if address == "":
-            address = "ei tietoa"
-        if len(address) > 30:
-            flash("Osoite saa olla korkeintaan 30 merkkiä")
-            return redirect("/change_info_restaurant/"+str(restaurant_id))
+            address = None
+        if address is not None:
+            if len(address) > 30:
+                flash("Osoite saa olla korkeintaan 30 merkkiä")
+                return redirect("/change_info_restaurant/"+str(restaurant_id))
 
         opening_hours = request.form["openinghours"]
         if opening_hours == "":
-            opening_hours = "ei tietoa"
-        if len(opening_hours) > 50:
-            flash("Aukioloajassa saa olla korkeintaan 50 merkkiä")
-            return redirect("/change_info_restaurant/"+str(restaurant_id))
+            opening_hours = None
+        if opening_hours is not None:
+            if len(opening_hours) > 50:
+                flash("Aukioloajassa saa olla korkeintaan 50 merkkiä")
+                return redirect("/change_info_restaurant/"+str(restaurant_id))
 
         info = request.form["info"]
         if info == "":
-            info = "-"
-        if len(info) > 1000:
-            flash("Info saa olla korkeintaan 1000 merkkiä")
-            return redirect("/change_info_restaurant/"+str(restaurant_id))
+            info = None
+        if info is not None:
+            if len(info) > 1000:
+                flash("Info saa olla korkeintaan 1000 merkkiä")
+                return redirect("/change_info_restaurant/"+str(restaurant_id))
 
         type = request.form["type"]
         if type == "":
-            type = "ei tietoa"
+            type = None
 
         if modify_information(restaurant_id, address, opening_hours, info, type):
             flash("Tietojen päivittäminen onnistui!")
@@ -211,7 +217,7 @@ def delete_review_route(review_id):
         flash("Kirjaudu sisään")
         return redirect("/login")
     if delete_review(review_id):
-        flash("Arvio poistettu onistuneesti")
+        flash("Arvio poistettu onnistuneesti")
     else:
         flash("Arvion poistaminen epäonnistui")
     return redirect("/")
