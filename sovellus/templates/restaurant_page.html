@@ -58,6 +58,13 @@ Kommentti: <br>
             <strong>Kommentti:</strong> {{ review.comment }}<br>
             <br>
             <em>Käyttäjältä {{ review.username }}</em>
+            <br>
+            {% if session.user_role == "admin" %}
+            <form action="/delete_review/{{ review.id }}" method="POST">
+                <button type="submit">Poista arvio</button>
+            </form> 
+            {% endif %}
+
         </li>
         <br>
     {% endfor %}

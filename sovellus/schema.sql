@@ -21,7 +21,8 @@ CREATE TABLE reviews (
     user_id INTEGER REFERENCES users,
     restaurant_id INTEGER REFERENCES restaurants,
     rating INTEGER,
-    comment TEXT
+    comment TEXT,
+    visible INTEGER
 );
 
 CREATE TABLE favorites (

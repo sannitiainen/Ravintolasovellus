@@ -3,7 +3,7 @@ from flask import redirect, render_template, request, session, flash, abort
 from users import login, register, logout, become_admin, become_user
 from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name
 from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups
-from reviews import add_review, list_reviews
+from reviews import add_review, list_reviews, delete_review
 
 # home page
 @app.route("/")
@@ -124,7 +124,7 @@ def restaurant_info_route(restaurant_id):
     information = show_restaurant(restaurant_id)
     return render_template("restaurant_page.html", id = restaurant_id, name = information[0][1], openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7], reviews = list_reviews(restaurant_id), groups = get_restaurants_groups(restaurant_id))
 
-@app.route("/delete_restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
+@app.route("/delete_restaurant/<int:restaurant_id>")
 def delete_restaurant_route(restaurant_id):
     if delete_restaurant(restaurant_id):
         flash("Ravintola poistettu")
@@ -204,6 +204,17 @@ def add_review_route(restaurant_id):
             return redirect("/restaurant/"+str(restaurant_id))
         else: 
             flash("Arvion lisääminen ei onnistunut")
+
+@app.route("/delete_review/<int:review_id>", methods=["POST"])
+def delete_review_route(review_id):
+    if "user_id" not in session:
+        flash("Kirjaudu sisään")
+        return redirect("/login")
+    if delete_review(review_id):
+        flash("Arvio poistettu onistuneesti")
+    else:
+        flash("Arvion poistaminen epäonnistui")
+    return redirect("/")
 
 
 # admin/user

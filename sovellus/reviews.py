@@ -9,8 +9,8 @@ def add_review(user_id, restaurant_id, rating, comment):
     result= db.session.execute(sql, {"restaurant_id": restaurant_id})
     restaurant_id= result.fetchone()[0]
 
-    sql = text("INSERT INTO reviews (user_id, restaurant_id, rating, comment) VALUES (:user_id, :restaurant_id, :rating, :comment)")
-    db.session.execute(sql, {"user_id": user_id, "restaurant_id": restaurant_id, "rating": rating, "comment": comment})
+    sql = text("INSERT INTO reviews (user_id, restaurant_id, rating, comment, visible) VALUES (:user_id, :restaurant_id, :rating, :comment, :visible)")
+    db.session.execute(sql, {"user_id": user_id, "restaurant_id": restaurant_id, "rating": rating, "comment": comment, "visible": 1})
     db.session.commit()
 
     update_rating(restaurant_id)
@@ -38,21 +38,23 @@ def update_rating(restaurant_id):
     return avg_rating
 
 def list_reviews(restaurant_id):
-    sql = text("SELECT user_id, rating, comment FROM reviews WHERE restaurant_id = :restaurant_id;")
+    sql = text("SELECT id, user_id, rating, comment FROM reviews WHERE restaurant_id = :restaurant_id;")
     result = db.session.execute(sql, {"restaurant_id": restaurant_id})
     reviews = list(result.fetchall())
 
     review_list = []
 
     for review in reviews:
-        id = review[0]
+        id = review[1]
         sql_username = text("SELECT username FROM users WHERE id = :id")
         u_name = db.session.execute(sql_username, {"id": id}).fetchone()[0]
-        review_list.append({"username": u_name, "rating": review[1], "comment": review[2]})
+        review_list.append({"id": review[0], "username": u_name, "rating": review[2], "comment": review[3]})
 
     return review_list
 
 
-def delete_review():
-    #only if admin
-    pass
+def delete_review(review_id):
+    sql = text("UPDATE reviews SET visible=0 WHERE id = :review_id;")
+    db.session.execute(sql, {"review_id": review_id})
+    db.session.commit()
+    return True
