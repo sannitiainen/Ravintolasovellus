@@ -1,6 +1,6 @@
 from app import app
 from flask import redirect, render_template, request, session, flash
-from users import login, register, logout, become_admin, is_admin
+from users import login, register, logout, become_admin, become_user
 from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name
 from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups
 from reviews import add_review, list_reviews
@@ -120,7 +120,6 @@ def restaurant_info_route(restaurant_id):
     return render_template("restaurant_page.html", id = restaurant_id, name = information[0][1], openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7], reviews = list_reviews(restaurant_id), groups = get_restaurants_groups(restaurant_id))
 
 @app.route("/restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
-#MUUTA TÄTÄ!!
 def add_review_route(restaurant_id):
     if "user_id" not in session:
         flash("Kirjaudu sisään")
@@ -130,15 +129,18 @@ def add_review_route(restaurant_id):
     if request.method == "POST":
 
         rating = request.form["rating"]
-        if int(rating) > 5:
+        if int(rating) > 5 or int(rating) < 1:
             flash("Varmista että arvio on välillä 1-5")
+            return redirect("/restaurant/"+str(restaurant_id))
 
         comment = request.form["comment"]
         if len(comment) < 1:
             comment = "ei kommenttia"
+        if len(comment) > 1000:
+            flash("Kommentti saa olla enintään 1000 merkkiä")
+            return redirect("/restaurant/"+str(restaurant_id))
 
         user_id = session["user_id"]
-        restaurant_id = restaurant_id
         if add_review(user_id, restaurant_id, rating, comment):
             flash("Arvion lisääminen onnistui!")
             return redirect("/restaurant/"+str(restaurant_id))
@@ -201,6 +203,18 @@ def become_admin_route():
     if request.method == "POST":
         if become_admin():
             flash("Olet nyt ylläpitäjä")
+            return redirect("/")
+        else:
+            flash("Jokin meni vikaan")
+
+@app.route("/become_user", methods = ["GET", "POST"])
+def become_user_route():
+    if request.method == "GET":
+        return render_template("become_user.html")
+
+    if request.method == "POST":
+        if become_user():
+            flash("Olet nyt tavallinen käyttäjä")
             return redirect("/")
         else:
             flash("Jokin meni vikaan")

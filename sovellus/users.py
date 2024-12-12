@@ -39,9 +39,6 @@ def register(username, password):
         flash("Käyttäjänimi on jo käytössä")
         return False
 
-def is_admin():
-    return session.get("user_role") == "admin"
-
 def become_admin():
     user_id = session["user_id"]
 
@@ -50,7 +47,20 @@ def become_admin():
     db.session.commit()
 
     if session.get("user_id") == user_id:
-        session["User_role"] = "admin"
+        session["user_role"] = "admin"
+        return True
+    else:
+        return False
+    
+def become_user():
+    user_id = session["user_id"]
+
+    sql = text("UPDATE users SET admin = 0 WHERE id = :user_id")
+    db.session.execute(sql, {"user_id": user_id})
+    db.session.commit()
+
+    if session.get("user_id") == user_id:
+        session["user_role"] = "user"
         return True
     else:
         return False
