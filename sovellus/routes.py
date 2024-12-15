@@ -1,7 +1,7 @@
 from app import app
 from flask import redirect, render_template, request, session, flash, abort
 from users import login, register, logout, become_admin, become_user, is_admin
-from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name
+from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name, is_visible
 from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups, get_groups_restaurants, get_groups_name, delete_group
 from reviews import add_review, list_reviews, delete_review
 
@@ -41,9 +41,6 @@ def register_route():
         return render_template("register.html")
     
     if request.method == "POST":
-        if session["csrf_token"] != request.form["csrf_token"]:
-            abort(403)
-
         username = request.form["username"]
         if len(username) < 5 or len(username) > 15:
             flash("Käyttäjätunnnuksen tulee olla 5-15 merkkiä pitkä")
@@ -135,8 +132,12 @@ def add_restaurant_route():
 
 @app.route("/restaurant/<int:restaurant_id>")
 def restaurant_info_route(restaurant_id):
-    information = show_restaurant(restaurant_id)
-    return render_template("restaurant_page.html", id = restaurant_id, name = information[0][1], openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7], reviews = list_reviews(restaurant_id), groups = get_restaurants_groups(restaurant_id))
+    if is_visible(restaurant_id) == True:
+        information = show_restaurant(restaurant_id)
+        return render_template("restaurant_page.html", id = restaurant_id, name = information[0][1], openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7], reviews = list_reviews(restaurant_id), groups = get_restaurants_groups(restaurant_id))
+    else:
+        flash("Ravintolaa ei ole olemassa")
+        return redirect("/")
 
 @app.route("/delete_restaurant/<int:restaurant_id>")
 def delete_restaurant_route(restaurant_id):

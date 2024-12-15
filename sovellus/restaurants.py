@@ -36,8 +36,8 @@ def modify_information(restaurant_id, address, opening_hours, info, type):
     return True
 
 def get_name(restaurant_id):
-    sql2 = text("SELECT name FROM restaurants WHERE id = :id")
-    restaurant_name_row = db.session.execute(sql2, {"id": restaurant_id}).fetchone()
+    sql = text("SELECT name FROM restaurants WHERE id = :id")
+    restaurant_name_row = db.session.execute(sql, {"id": restaurant_id}).fetchone()
     restaurant_name = restaurant_name_row[0]
     return restaurant_name
 
@@ -47,6 +47,10 @@ def delete_restaurant(restaurant_id):
     db.session.commit()
     return True
 
-
-
-
+def is_visible(restaurant_id):
+    sql = text("SELECT visible FROM restaurants WHERE id = :id")
+    vis = db.session.execute(sql, {"id": restaurant_id}).fetchone()
+    if vis == 1:
+        return True
+    else:
+        return False

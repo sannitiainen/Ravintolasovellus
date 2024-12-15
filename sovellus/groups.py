@@ -1,11 +1,11 @@
-from flask import request, render_template, session
+from flask import session
 from db import db
 from sqlalchemy.sql import text
 
 def add_group(name):
     creator_id = session["user_id"]
-    sql = text("INSERT INTO groups (name, creator_id) VALUES (:name, :creator_id)")
-    db.session.execute(sql, {"name": name, "creator_id": creator_id})
+    sql = text("INSERT INTO groups (name, creator_id, visible) VALUES (:name, :creator_id, :visible)")
+    db.session.execute(sql, {"name": name, "creator_id": creator_id, "visible": 1})
     db.session.commit()
 
     sql2 = text("SELECT id FROM groups WHERE name LIKE :name")
