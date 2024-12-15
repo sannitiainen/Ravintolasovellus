@@ -2,7 +2,7 @@ from app import app
 from flask import redirect, render_template, request, session, flash, abort
 from users import login, register, logout, become_admin, become_user, is_admin
 from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name
-from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups, get_groups_restaurants, get_groups_name
+from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups, get_groups_restaurants, get_groups_name, delete_group
 from reviews import add_review, list_reviews, delete_review
 
 # home page
@@ -351,3 +351,21 @@ def add_group_route(restaurant_id):
 def group_info_route(group_id):
     restaurants = get_groups_restaurants(group_id)
     return render_template("group_page.html", id = group_id, restaurants = restaurants, groups = get_all_groups(), name = get_groups_name(group_id))
+
+@app.route("/delete_group/<int:group_id>")
+def delete_group_route(group_id):
+    allow = False
+    if is_admin():
+        allow = True
+    if not allow:
+        flash("Sinulla ei ole oikeutta tälle sivulle")
+        return redirect("/")
+    if "user_id" not in session:
+        flash("Kirjaudu sisään")
+        return redirect("/login")
+    if delete_group(group_id):
+        flash("Ryhmä poistettu")
+        return redirect("/")
+    else:
+        flash("Ryhmää ei voitu poistaa.")
+        return redirect("/group/"+str(group_id))

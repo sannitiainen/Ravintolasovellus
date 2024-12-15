@@ -29,6 +29,7 @@ CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name TEXT,
     creator_id INTEGER REFERENCES users
+    visible INTEGER
 );
 
 CREATE TABLE map_group (

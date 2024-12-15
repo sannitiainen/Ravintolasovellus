@@ -17,4 +17,8 @@
 {% else %}
     <p>Ravintoloita ei löytynyt.</p>
 {% endif %}
+
+{% if session["user_role"] == "admin" %}
+<a href="/delete_group/{{ id }}"> Poista ryhmä
+{% endif %}
 {% endblock %}

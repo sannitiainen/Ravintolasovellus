@@ -53,3 +53,8 @@ def get_groups_name(group_id):
     group_name = group_name_row[0]
     return group_name
     
+def delete_group(group_id):
+    sql = text("UPDATE groups SET visible=0 WHERE id = :group_id;")
+    db.session.execute(sql, {"group_id": group_id})
+    db.session.commit()
+    return True

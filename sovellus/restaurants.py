@@ -45,7 +45,7 @@ def delete_restaurant(restaurant_id):
     sql = text("UPDATE restaurants SET visible=0 WHERE id = :restaurant_id;")
     db.session.execute(sql, {"restaurant_id": restaurant_id})
     db.session.commit()
-    return True #MYÖS FALSE VAIHTOEHTO!!
+    return True
 
 
 
