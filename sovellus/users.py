@@ -40,6 +40,12 @@ def register(username, password):
     else:
         flash("Käyttäjänimi on jo käytössä")
         return False
+    
+def is_admin():
+    if session["user_role"] == "admin":
+        return True
+    else:
+        return False
 
 def become_admin():
     user_id = session["user_id"]

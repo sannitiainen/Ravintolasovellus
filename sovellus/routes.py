@@ -1,6 +1,6 @@
 from app import app
 from flask import redirect, render_template, request, session, flash, abort
-from users import login, register, logout, become_admin, become_user
+from users import login, register, logout, become_admin, become_user, is_admin
 from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name
 from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups
 from reviews import add_review, list_reviews, delete_review
@@ -73,6 +73,9 @@ def logout_route():
 @app.route("/add_restaurant", methods=["GET", "POST"])
 def add_restaurant_route():
     if request.method == "GET":
+        if not is_admin():
+            flash("Sinulla ei ole oikeutta tälle sivulle")
+            return redirect("/")
         return render_template("add_restaurant.html")
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
@@ -132,6 +135,12 @@ def restaurant_info_route(restaurant_id):
 
 @app.route("/delete_restaurant/<int:restaurant_id>")
 def delete_restaurant_route(restaurant_id):
+    allow = False
+    if is_admin():
+        allow = True
+    if not allow:
+        flash("Sinulla ei ole oikeutta tälle sivulle")
+        return redirect("/")
     if "user_id" not in session:
         flash("Kirjaudu sisään")
         return redirect("/login")
@@ -145,6 +154,9 @@ def delete_restaurant_route(restaurant_id):
 @app.route("/change_info_restaurant/<int:restaurant_id>", methods = ["GET", "POST"])
 def change_info_route(restaurant_id):
     if request.method == "GET":
+        if not is_admin():
+            flash("Sinulla ei ole oikeutta tälle sivulle")
+            return redirect("/")
         information = show_restaurant(restaurant_id)
         return render_template("change_info.html", name = get_name(restaurant_id), id = restaurant_id, openinghours = information[0][2], address = information[0][3], info = information[0][4], avg_rating = information[0][6], type = information[0][7], reviews = list_reviews(restaurant_id), groups = get_restaurants_groups(restaurant_id))
     if request.method == "POST":
@@ -223,6 +235,9 @@ def add_review_route(restaurant_id):
 
 @app.route("/delete_review/<int:review_id>", methods=["POST"])
 def delete_review_route(review_id):
+    if not is_admin():
+        flash("Sinulla ei ole oikeutta tälle sivulle")
+        return redirect("/")
     if "user_id" not in session:
         flash("Kirjaudu sisään")
         return redirect("/login")
@@ -238,6 +253,9 @@ def delete_review_route(review_id):
 @app.route("/become_admin", methods = ["GET", "POST"])
 def become_admin_route():
     if request.method == "GET":
+        if is_admin():
+            flash("Olet jo ylläpitäjä")
+            return redirect("/")
         return render_template("become_admin.html")
 
     if request.method == "POST":
@@ -256,6 +274,9 @@ def become_admin_route():
 @app.route("/become_user", methods = ["GET", "POST"])
 def become_user_route():
     if request.method == "GET":
+        if not is_admin():
+            flash("Olet jo käyttäjä")
+            return redirect("/")
         return render_template("become_user.html")
 
     if request.method == "POST":
@@ -276,6 +297,9 @@ def become_user_route():
 @app.route("/add_group/<int:restaurant_id>", methods = ["GET", "POST"])
 def add_restaurant_to_group_route(restaurant_id):
     if request.method == "GET":
+        if not is_admin():
+            flash("Sinulla ei ole oikeutta tälle sivulle")
+            return redirect("/")
         return render_template("groups.html", restaurant_id=restaurant_id, groups = get_all_groups())
     if request.method == "POST":
         if "user_id" not in session:
