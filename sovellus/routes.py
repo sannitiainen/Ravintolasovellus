@@ -8,12 +8,17 @@ from reviews import add_review, list_reviews, delete_review
 # home page
 @app.route("/")
 def index():
+    return render_template("index.html", restaurants = get_all_restaurants())
+
+@app.route("/search")
+def search_route():
     query = request.args.get("query")
     if query:
         results = search_restaurant(query)
     else:
         results = []
-    return render_template("index.html", restaurants = get_all_restaurants(), search_results = results, query = query)
+    return render_template("index.html", search_results = results, query = query, restaurants = get_all_restaurants())
+
 
 # login/register
 
