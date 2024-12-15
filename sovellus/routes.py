@@ -287,7 +287,7 @@ def become_user_route():
             abort(403)
 
         if become_user():
-            flash("Olet nyt tavallinen käyttäjä")
+            flash("Olet nyt peruskäyttäjä")
             return redirect("/")
         else:
             flash("Jokin meni vikaan")

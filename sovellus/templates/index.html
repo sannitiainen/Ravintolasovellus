@@ -3,6 +3,10 @@
 {% block title %}Etusivu{% endblock %}
 
 {% block content %}
+
+<div class="homepage-container">
+    <div class="main-section">
+
     <h2>Etusivu</h2>
     <p>Tervetuloa sovellukseen!</p>
 
@@ -26,7 +30,9 @@
 <p>Hakua vastaavia ravintoloita ei löytynyt.</p>
 {% endif %}
 
+</div>
 
+<aside class="sidebar">
 
 <h4>Ravintolat:</h4> 
 
@@ -39,5 +45,7 @@
 {% else %}
     <p>Ravintoloita ei löytynyt.</p>
 {% endif %}
+</aside>
+</div>
 
 {% endblock %}

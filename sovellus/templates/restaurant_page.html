@@ -3,6 +3,7 @@
 {% block content %}
 
 <h2>{{ name }}</h2>
+
 <ul>
 {% if openinghours is not none %}
 <li>Aukioloajat : {{ openinghours }}
@@ -37,7 +38,6 @@
 {% endfor %}
 </ul>
 {% endif %}
-
 <br>
 <br>
 
