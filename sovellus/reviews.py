@@ -26,7 +26,7 @@ def update_rating(restaurant_id):
     db.session.execute(sql_update, {"avg_rating": avg_rating, "restaurant_id": restaurant_id})
     db.session.commit()
 
-    return avg_rating
+    return float(avg_rating)
 
 def list_reviews(restaurant_id):
     sql = text("SELECT id, user_id, rating, comment FROM reviews WHERE restaurant_id = :restaurant_id;")
