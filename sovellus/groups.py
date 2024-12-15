@@ -37,7 +37,7 @@ def get_groups_restaurants(group_id):
         restaurant_id = restaurant[0]
         sql_name = text("SELECT name FROM restaurants WHERE id = :restaurant_id")
         name = db.session.execute(sql_name, {"restaurant_id": restaurant_id}).fetchone()[0]
-        names.append({"name": name})
+        names.append({"id": restaurant_id, "name": name})
 
     return names
 

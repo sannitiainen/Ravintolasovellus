@@ -50,7 +50,7 @@ def delete_restaurant(restaurant_id):
 def is_visible(restaurant_id):
     sql = text("SELECT visible FROM restaurants WHERE id = :id")
     vis = db.session.execute(sql, {"id": restaurant_id}).fetchone()
-    if vis == 1:
+    if vis[0] == 1:
         return True
     else:
         return False
