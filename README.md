@@ -5,19 +5,13 @@ Sovelluksessa näkyy tietyn alueen ravintolat, joista voi etsiä tietoa ja lukea
 Ominaisuuksia:
 
 - Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
+- Käyttäjä pystyy myös siirtymän ylläpitäjätilaan navigaation "Ylläpitäjäksi" painikkeella ja takaisin peruskäyttäjäksi samasta kohdasta.
 - Käyttäjä voi antaa arvion (tähdet ja kommentti) ravintolasta ja lukea muiden antamia arvioita.
-- Ylläpitäjä voi lisätä ja poistaa ravintoloita sekä määrittää ravintolasta näytettävät tiedot.
+- Ylläpitäjä voi lisätä ja poistaa ravintoloita sekä valita mitkä tiedot antaa ravintolasta. Ravintolan tietoja voi muokata jälkeenpäin.
 - Käyttäjä voi etsiä kaikki ravintolat, joiden kuvauksessa on annettu sana.
 - Käyttäjä näkee myös listan, jossa ravintolat on järjestetty parhaimmasta huonoimpaan arvioiden mukaisesti.
 - Ylläpitäjä voi tarvittaessa poistaa käyttäjän antaman arvion.
-- Ylläpitäjä voi luoda ryhmiä, joihin ravintoloita voi luokitella. Ravintola voi kuulua yhteen tai useampaan ryhmään.
-
-Tilanne 1.12.
-- Joitain toimintoja puutuu vielä esim. kommentin poisto ja ylläpitäjän mahdollisuus määrittää mitkä tiedot ravintolasta näytetään
-- Tietokantoja on kuusi, joista yhtä ei vielä käytetä, mutta sitä tullaan käyttmään lopullisessa versiossa
-- Pääosin toiminnot ovat kunnossa ja toimivat, vaativat ehkä pientä hiontaa
-- Ulkoasu on melko alkeellinen, sitä pitää vielä hioa
-
+- Ylläpitäjä voi luoda ryhmiä, joihin ravintoloita voi luokitella. Ravintola voi kuulua yhteen tai useampaan ryhmään. Ryhmän voi myös poistaa. Ryhmillä on omat sivut, joissa on listattu kaikki ravintolat jotka kuuluvat ryhmään.
 
 Testausohjeet
 
@@ -27,20 +21,19 @@ Aluksi kloonaa repositorio
 
 Avaa kohdekansio Ravintolasovellus ja kansio sovellus
 
-    cd Ravintolasovellus
-    cd sovellus
+    cd Ravintolasovellus/sovellus
 
 Rakenna virtuaaliympäristö
 
     python3 -m venv venv
+    
+Avaa virtuaaliympäristö
+
+    source venv/bin/activate
 
 Asenna esivaatimukset
 
     pip install -r requirements.txt
-
-Avaa virtuaaliympäristö
-
-    source venv/bin/activate
 
 Avaa uusi terminaali-ikkuna ja käynnistä tietokanta
 
@@ -59,6 +52,10 @@ Voit sulkea psql-terminaalin
 Määritä tietokantaskeema virtuaaliympäristössä sovellus-kansiossa
 
     psql -d <tietokannan-nimi> < schema.sql
+
+Lisää samassa paikassa esimerkkiravintolat tiedostosta example_data.sql
+
+    psql -d <tietokannan-nimi> < example_data.sql
 
 Luo kansioon .env-tiedosto ja määritä sen sisältö seuraavanlaiseksi:
 
