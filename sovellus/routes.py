@@ -2,13 +2,13 @@ from app import app
 from flask import redirect, render_template, request, session, flash, abort
 from users import login, register, logout, become_admin, become_user, is_admin
 from restaurants import get_all_restaurants, add_restaurant, delete_restaurant, show_restaurant, search_restaurant, modify_information, get_name
-from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups
+from groups import get_all_groups, add_group, add_restaurant_to_group, get_restaurants_groups, get_groups_restaurants, get_groups_name
 from reviews import add_review, list_reviews, delete_review
 
 # home page
 @app.route("/")
 def index():
-    return render_template("index.html", restaurants = get_all_restaurants())
+    return render_template("index.html", restaurants = get_all_restaurants(), groups = get_all_groups())
 
 @app.route("/search")
 def search_route():
@@ -346,3 +346,8 @@ def add_group_route(restaurant_id):
             return redirect("/add_group/"+str(restaurant_id))
         else:
             flash("Ryhmää ei voitu lisätä")
+
+@app.route("/group/<int:group_id>", methods = ["GET"])
+def group_info_route(group_id):
+    restaurants = get_groups_restaurants(group_id)
+    return render_template("group_page.html", id = group_id, restaurants = restaurants, groups = get_all_groups(), name = get_groups_name(group_id))

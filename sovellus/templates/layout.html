@@ -21,6 +21,21 @@
     <li><a href="/become_admin">Ylläpitäjäksi</a></li>
     {% endif %}
 
+    <div class="dropdown">
+      <button class="dropbtn">Ryhmät</button>
+      <div class="dropdown-content">
+        {% if groups %}
+        <ul>
+          {% for group in groups %}
+          <li><a href="/group/{{ group.id }}">{{ group.name }}</a></li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>Ei vielä ryhmiä.</p>
+        {% endif %}
+      </div>
+    </div>
+
     {% if session.username %}
     <li><a href="/logout">Kirjaudu ulos</a></li>
     {% else %}

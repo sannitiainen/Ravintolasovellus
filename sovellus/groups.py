@@ -29,11 +29,27 @@ def get_restaurants_groups(restaurant_id):
 
     return names
 
+def get_groups_restaurants(group_id):
+    sql = text("SELECT restaurant_id FROM map_group WHERE group_id = :group_id")
+    restaurants = db.session.execute(sql, {"group_id": group_id}).fetchall()
+    names = []
+    for restaurant in restaurants:
+        restaurant_id = restaurant[0]
+        sql_name = text("SELECT name FROM restaurants WHERE id = :restaurant_id")
+        name = db.session.execute(sql_name, {"restaurant_id": restaurant_id}).fetchone()[0]
+        names.append({"name": name})
 
-
+    return names
 
 def add_restaurant_to_group(restaurant_id, group_id):
     sql = text("INSERT INTO map_group (restaurant_id, group_id) VALUES (:restaurant_id, :group_id)")
     db.session.execute(sql, {"restaurant_id": restaurant_id, "group_id": group_id})
     db.session.commit()
     return True
+
+def get_groups_name(group_id):
+    sql = text("SELECT name FROM groups WHERE id = :id")
+    group_name_row = db.session.execute(sql, {"id": group_id}).fetchone()
+    group_name = group_name_row[0]
+    return group_name
+    
